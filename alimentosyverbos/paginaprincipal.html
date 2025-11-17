@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to your Spanish Class!</title>
+    <!-- Importación de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Definición de la fuente y colores personalizados */
+        :root {
+            --flamingo-pink: #FF79AC;
+            --eerie-black: #121118;
+            --background-white: #FFFFFF;
+        }
+
+        /* Simulación de la fuente "Platform Medium" con una combinación de Tailwind y fallback */
+        .platform-medium {
+            font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-weight: 500; /* Medium weight */
+        }
+        
+        body {
+            background-color: var(--background-white);
+        }
+
+        /* Estilo específico para los botones según tus indicaciones */
+        .btn-flamingo {
+            background-color: var(--flamingo-pink);
+            color: white;
+            border-radius: 0.5rem; /* Bordes redondeados de Tailwind */
+            padding: 0.75rem 1.5rem; /* Espaciado */
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            overflow: hidden; /* Necesario para que el borde negro inferior no se desborde */
+            box-shadow: 0 4px 0 0 var(--eerie-black); /* Simulación de borde inferior negro */
+        }
+
+        .btn-flamingo:hover {
+            /* Efecto sutil al pasar el ratón */
+            background-color: #f75d97; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 0 var(--eerie-black);
+        }
+
+        .btn-flamingo:active {
+            /* Efecto al presionar (simula el hundimiento del botón) */
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 0 var(--eerie-black);
+        }
+    </style>
+</head>
+<body class="platform-medium min-h-screen flex flex-col justify-between items-center p-4 sm:p-8">
+
+    <!-- Contenedor Principal de Contenido -->
+    <div class="w-full max-w-4xl flex flex-col items-center text-center mt-12 mb-12">
+        
+        <!-- Título Principal -->
+        <h1 class="text-4xl sm:text-6xl font-extrabold mb-10" style="color: var(--eerie-black);">
+            Welcome to your Spanish Class!
+        </h1>
+
+        <!-- Subtítulo o Bienvenida -->
+        <p class="text-lg sm:text-xl text-gray-700 mb-12 max-w-xl">
+            ¡Hola! Selecciona el tema que quieres explorar para comenzar tu lección de español.
+        </p>
+
+        <!-- Contenedor de Botones -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
+            
+            <!-- Botón 1: Los alimentos -->
+            <a href="losalimentos.html" class="btn-flamingo text-xl font-bold uppercase tracking-wider flex justify-center items-center">
+                Los alimentos
+            </a>
+
+            <!-- Botón 2: Cooking verbs -->
+            <a href="cookingverbs.html" class="btn-flamingo text-xl font-bold uppercase tracking-wider flex justify-center items-center">
+                Cooking verbs
+            </a>
+
+            <!-- Botón 3: Actividad -->
+            <a href="actividad.html" class="btn-flamingo text-xl font-bold uppercase tracking-wider flex justify-center items-center">
+                Actividad
+            </a>
+            
+        </div>
+        
+    </div>
+
+    <!-- Pie de Página (Footer) -->
+    <footer class="w-full max-w-4xl text-center py-6 border-t border-gray-200">
+        
+        <!-- Texto de Copyright -->
+        <p class="text-sm text-gray-500 mb-4">
+            © 2025 Spanish Lessons with María C. All rights reserved.
+        </p>
+
+        <!-- Botón de Redirección -->
+        <a href="https://preply.com/en/tutor/5105409?utm_source=friend&utm_medium=ref&utm_campaign=stu_plg_plg_all_0_mul_xx_multiplesub_share-tutor-tutoring_1&utm_content=OTQ2NTAwNQ==" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-flamingo inline-block text-base font-semibold transition duration-300 transform hover:scale-105">
+            Find your Spanish class here.
+        </a>
+        
+    </footer>
+
+</body>
+</html>

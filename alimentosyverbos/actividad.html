@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verbos comunes sobre comida</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuración de color principal y fuente Inter (usado para aproximar Platform Medium) */
+        :root {
+            --color-pink: #FF79AC; /* Flamingo Pink */
+            --color-black: #121118; /* Eerie Black */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white; /* Fondo blanco */
+            color: var(--color-black);
+            font-weight: 500; /* Medium weight */
+        }
+        
+        /* Estilo para el contenedor principal centrado y responsivo */
+        .container {
+            max-width: 800px;
+        }
+
+        /* Estilo para los campos de texto de la actividad */
+        .completion-input {
+            border: 2px solid var(--color-pink);
+            transition: background-color 0.3s, border-color 0.3s;
+            padding: 2px 8px;
+            border-radius: 4px;
+            width: auto;
+            min-width: 120px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        /* Clase para el texto justificado requerido */
+        .text-justified {
+            text-align: justify;
+        }
+
+        /* Clases de retroalimentación de color */
+        .correct-answer {
+            background-color: #d1fae5 !important; /* Verde claro */
+            border-color: #34d399 !important;
+        }
+
+        .incorrect-answer {
+            background-color: #fee2e2 !important; /* Rojo claro */
+            border-color: #f87171 !important;
+        }
+
+        /* Estilo para el botón principal */
+        .pink-button {
+            background-color: var(--color-pink);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .pink-button:hover {
+            background-color: #D65A8C; /* Un tono más oscuro de rosa al pasar el ratón */
+        }
+
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="container mx-auto">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-10 text-gray-800" style="color: var(--color-pink);">
+            Verbos comunes sobre comida
+        </h1>
+
+        <!-- SECCIÓN I: DEFINICIONES -->
+        <section class="mb-12 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
+            <h2 class="text-2xl font-bold mb-4" style="color: var(--color-pink);">I. Información / Information</h2>
+            
+            <div class="space-y-4 text-lg text-justified">
+                <!-- Verbo: Cocinar -->
+                <p>
+                    <b class="font-bold">Cocinar:</b> Preparar los alimentos aplicándoles calor. (<span class="italic text-gray-600">To prepare food by applying heat</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Me gusta cocinar pasta los domingos.</span>
+                </p>
+
+                <!-- Verbo: Comer -->
+                <p>
+                    <b class="font-bold">Comer:</b> Ingerir alimentos. (<span class="italic text-gray-600">To consume food</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Vamos a comer pizza esta noche.</span>
+                </p>
+
+                <!-- Verbo: Beber -->
+                <p>
+                    <b class="font-bold">Beber:</b> Consumir líquidos. (<span class="italic text-gray-600">To consume liquids</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Prefiero beber agua con las comidas.</span>
+                </p>
+
+                <!-- Verbo: Hervir -->
+                <p>
+                    <b class="font-bold">Hervir:</b> Cocinar un líquido hasta que produce burbujas. (<span class="italic text-gray-600">To cook in bubbling water</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Voy a hervir los huevos para el desayuno.</span>
+                </p>
+
+                <!-- Verbo: Freír -->
+                <p>
+                    <b class="font-bold">Freír:</b> Cocinar en aceite caliente. (<span class="italic text-gray-600">To cook in hot oil</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Me encanta freír papas.</span>
+                </p>
+
+                <!-- Verbo: Asar -->
+                <p>
+                    <b class="font-bold">Asar:</b> Cocinar alimentos al fuego o al horno. (<span class="italic text-gray-600">To cook food in the oven or over a fire</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Vamos a asar carne para la cena.</span>
+                </p>
+
+                <!-- Verbo: Hornear -->
+                <p>
+                    <b class="font-bold">Hornear:</b> Cocinar alimentos en el horno. (<span class="italic text-gray-600">To cook food in the oven</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: A mi mamá le encanta hornear pasteles.</span>
+                </p>
+
+                <!-- Verbo: Mezclar -->
+                <p>
+                    <b class="font-bold">Mezclar:</b> Unir varios ingredientes. (<span class="italic text-gray-600">To combine several ingredients</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Voy a mezclar los ingredientes para la ensalada.</span>
+                </p>
+
+                <!-- Verbo: Cortar -->
+                <p>
+                    <b class="font-bold">Cortar:</b> Dividir alimentos en trozos. (<span class="italic text-gray-600">To divide food into pieces</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Debes cortar las verduras en pequeños cubos.</span>
+                </p>
+
+                <!-- Verbo: Servir -->
+                <p>
+                    <b class="font-bold">Servir:</b> Poner la comida en los platos para que las personas la coman. (<span class="italic text-gray-600">To place food on plates for people to eat</span>)
+                    <br><span class="text-sm italic text-gray-500">Ejemplo: Voy a servir la sopa ahora. La cena esta servida.</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN II: ACTIVIDAD -->
+        <section class="mb-12 p-6 bg-white rounded-xl shadow-lg border border-gray-100">
+            <h2 class="text-2xl font-bold mb-4" style="color: var(--color-pink);">II. Actividad / Activitie</h2>
+
+            <p class="text-base mb-4 text-justified">
+                Hoy es jueves por la mañana, es un día hermoso y soleado. La luz del sol entra por las ventanas. Joris y su madre están en la cocina, él quiere aprender a cocinar. Su madre Anneke le va a enseñar a preparar los alimentos.
+            </p>
+
+            <div class="space-y-4 text-base">
+                <p class="text-justified">
+                    <b class="font-bold">Madre:</b> Joris, primero vamos a
+                    <input type="text" id="input-1" class="completion-input" data-index="1" data-correct-answer="Cortar" maxlength="15" placeholder="1. Verbo">
+                    las verduras. Usa este cuchillo y ten cuidado de no cortarte.
+                </p>
+                <p class="text-justified">
+                    Joris toma el cuchillo y empieza a cortar las
+                    <input type="text" id="input-2" class="completion-input" data-index="2" data-correct-answer="Zanahorias" maxlength="15" placeholder="2. Vegetal">
+                    (<span class="italic text-gray-600">carrots</span>), los tomates y las
+                    <input type="text" id="input-3" class="completion-input" data-index="3" data-correct-answer="Cebollas" maxlength="15" placeholder="3. Vegetal">
+                    (<span class="italic text-gray-600">onions</span>).
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Madre:</b> Muy bien, ahora vamos a
+                    <input type="text" id="input-4" class="completion-input" data-index="4" data-correct-answer="Mezclar" maxlength="15" placeholder="4. Verbo">
+                    (<span class="italic text-gray-600">to mix</span>) estas verduras con un poco de aceite.
+                    Ellos mezclan las verduras, añaden sal y un poco de ajo. Mientras tanto, la madre de Joris pone una olla de agua a
+                    <input type="text" id="input-5" class="completion-input" data-index="5" data-correct-answer="Hervir" maxlength="15" placeholder="5. Verbo">
+                    (<span class="italic text-gray-600">to boil</span>) para preparar el arroz.
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Madre:</b> El siguiente paso es asar el pollo en el horno. Vamos a poner el pollo a
+                    <input type="text" id="input-6" class="completion-input" data-index="6" data-correct-answer="Hornear" maxlength="15" placeholder="6. Verbo">
+                    (<span class="italic text-gray-600">to bake</span>) por 30 minutos.
+                </p>
+                <p class="text-justified">
+                    La cocina empieza a oler delicioso mientras el pollo se asa. Joris está emocionado y le pregunta a su madre:
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Joris:</b> ¿Podemos preparar algo frito también?
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Madre:</b> Claro, Joris. Podemos
+                    <input type="text" id="input-7" class="completion-input" data-index="7" data-correct-answer="Freír" maxlength="15" placeholder="7. Verbo">
+                    (<span class="italic text-gray-600">fry</span>) unas papas. Puedes empezar cortando las papas mientras yo caliento el aceite.
+                </p>
+                <p class="text-justified">
+                    Con cuidado, empiezan a freír las papas hasta que están doradas y crujientes.
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Madre:</b> ¿Puedes
+                    <input type="text" id="input-8" class="completion-input" data-index="8" data-correct-answer="Poner la mesa" maxlength="20" placeholder="8. Frase">
+                    (<span class="italic text-gray-600">set the table</span>) mientras estoy sirviendo la comida?
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Joris:</b> Sí, enseguida.
+                </p>
+                <p class="text-justified">
+                    Finalmente, se sientan a comer y sirven el arroz con las verduras, el pollo asado y las papas fritas. Joris y su madre están listos para disfrutar.
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Joris:</b> ¡Esto
+                    <input type="text" id="input-9" class="completion-input" data-index="9" data-correct-answer="Huele" maxlength="15" placeholder="9. Verbo">
+                    (<span class="italic text-gray-600">smells</span>) increíble, mamá! Estoy tan emocionado de probarlo todo.
+                </p>
+                <p class="text-justified">
+                    <b class="font-bold">Madre:</b> Y no olvides beber un poco de agua para acompañar la comida. ¡Buen provecho!
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE RESPUESTAS Y BOTÓN -->
+        <div class="text-center mt-8">
+            <button onclick="toggleAnswers()" class="pink-button" id="toggleButton">
+                Mostrar Respuestas Correctas
+            </button>
+        </div>
+
+        <section id="answersSection" class="mt-8 p-6 bg-gray-50 rounded-xl shadow-inner border border-gray-200 hidden">
+            <h3 class="text-xl font-bold mb-3" style="color: var(--color-pink);">Respuestas Correctas</h3>
+            <ol class="list-decimal list-inside space-y-1">
+                <li><b class="font-bold">Cortar</b></li>
+                <li><b class="font-bold">Zanahorias</b></li>
+                <li><b class="font-bold">Cebollas</b></li>
+                <li><b class="font-bold">Mezclar</b></li>
+                <li><b class="font-bold">Hervir</b></li>
+                <li><b class="font-bold">Hornear</b></li>
+                <li><b class="font-bold">Freír</b></li>
+                <li><b class="font-bold">Poner la mesa</b></li>
+                <li><b class="font-bold">Huele</b></li>
+            </ol>
+        </section>
+
+        <!-- Mensaje de verificación (alerta personalizada) -->
+        <div id="messageBox" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-xl text-white font-bold transition-opacity duration-300 opacity-0 hidden" role="alert">
+            <!-- Contenido del mensaje -->
+        </div>
+
+    </div>
+
+    <script>
+        // Array de respuestas correctas (para verificación de fallbacks)
+        const correctAnswers = {
+            1: "Cortar",
+            2: "Zanahorias",
+            3: "Cebollas",
+            4: "Mezclar",
+            5: "Hervir",
+            6: "Hornear",
+            7: "Freír",
+            8: "Poner la mesa",
+            9: "Huele"
+        };
+        
+        // Obtener todos los campos de entrada de la actividad
+        const inputs = document.querySelectorAll('.completion-input');
+
+        /**
+         * Muestra una alerta temporal en la esquina para notificar al usuario.
+         * @param {string} message - El mensaje a mostrar.
+         * @param {string} type - 'success' o 'error'.
+         */
+        function showMessage(message, type) {
+            const box = document.getElementById('messageBox');
+            box.textContent = message;
+            box.classList.remove('bg-green-500', 'bg-red-500', 'hidden', 'opacity-0');
+            
+            if (type === 'success') {
+                box.classList.add('bg-green-500');
+            } else {
+                box.classList.add('bg-red-500');
+            }
+
+            // Muestra la caja
+            box.classList.add('opacity-100');
+
+            // Oculta la caja después de 2 segundos
+            setTimeout(() => {
+                box.classList.remove('opacity-100');
+                box.classList.add('opacity-0');
+                setTimeout(() => {
+                    box.classList.add('hidden');
+                }, 300); // Espera a que termine la transición de opacidad
+            }, 2000);
+        }
+
+        /**
+         * Verifica la respuesta de un campo de entrada.
+         * @param {HTMLInputElement} inputElement - El campo de entrada a verificar.
+         */
+        function checkAnswer(inputElement) {
+            if (inputElement.disabled) return;
+
+            const userAnswer = inputElement.value.trim();
+            const correctAnswer = inputElement.getAttribute('data-correct-answer');
+            const index = parseInt(inputElement.getAttribute('data-index'));
+
+            // Normalización para comparación (ignora mayúsculas/minúsculas y tildes/acentos)
+            const normalize = (str) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (normalize(userAnswer) === normalize(correctAnswer)) {
+                // Respuesta correcta
+                inputElement.classList.add('correct-answer');
+                inputElement.classList.remove('incorrect-answer');
+                inputElement.disabled = true;
+                showMessage("¡Correcto! Respuesta " + index + " validada.", 'success');
+                
+                // Mueve el foco al siguiente campo no completado
+                focusNextInput(index);
+                
+            } else {
+                // Respuesta incorrecta
+                inputElement.classList.add('incorrect-answer');
+                inputElement.classList.remove('correct-answer');
+                showMessage("Respuesta " + index + " incorrecta. Intenta de nuevo.", 'error');
+            }
+        }
+
+        /**
+         * Busca el siguiente campo de entrada no completado y le da foco.
+         * @param {number} currentIndex - El índice del campo actual.
+         */
+        function focusNextInput(currentIndex) {
+            const nextIndex = currentIndex + 1;
+            const nextInput = document.querySelector(`[data-index="${nextIndex}"]`);
+
+            if (nextInput && !nextInput.disabled) {
+                nextInput.focus();
+            } else {
+                // Si no hay siguiente índice o ya está completado, busca el primer campo pendiente.
+                const firstPending = Array.from(inputs).find(input => !input.disabled);
+                if (firstPending) {
+                    firstPending.focus();
+                } else {
+                    showMessage("¡Actividad completada!", 'success');
+                }
+            }
+        }
+        
+        /**
+         * Maneja la pulsación de la tecla Enter.
+         * @param {KeyboardEvent} event - El evento de teclado.
+         */
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Previene el comportamiento predeterminado del formulario
+                checkAnswer(event.target);
+            }
+        }
+
+        /**
+         * Muestra u oculta la sección de respuestas correctas.
+         */
+        function toggleAnswers() {
+            const section = document.getElementById('answersSection');
+            const button = document.getElementById('toggleButton');
+
+            if (section.classList.contains('hidden')) {
+                section.classList.remove('hidden');
+                button.textContent = 'Ocultar Respuestas Correctas';
+            } else {
+                section.classList.add('hidden');
+                button.textContent = 'Mostrar Respuestas Correctas';
+            }
+        }
+
+        // Asignar el event listener a todos los campos de entrada
+        inputs.forEach(input => {
+            input.addEventListener('keydown', handleEnterKey);
+        });
+
+        // Enfocar el primer input al cargar la página
+        window.onload = () => {
+             const firstInput = document.getElementById('input-1');
+             if (firstInput) {
+                 firstInput.focus();
+             }
+        };
+
+    </script>
+</body>
+</html>

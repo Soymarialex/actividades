@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Food Verbs | Lecciones con María C.</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Inter font (Standard and clean) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom colors and font for the Tailwind config */
+        :root {
+            --color-pink: #FF79AC; /* Flamingo Pink */
+            --color-black: #121118; /* Eerie Black */
+        }
+
+        /* Platform Medium simulation using Inter or standard font stack */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white; /* Changed to white background */
+            color: var(--color-black); /* Changed text color to dark */
+        }
+
+        .btn-primary {
+            background-color: var(--color-pink);
+            color: var(--color-black);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 800; /* Extra Bold for the 'Platform Medium' feel */
+            transition: all 0.2s;
+            /* Adjusted shadow for light background */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 10px -3px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: white; /* Adjusted for white background */
+            color: var(--color-pink);
+            border: 2px solid var(--color-pink);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-pink);
+            color: var(--color-black);
+        }
+
+        /* Custom scrollbar for better visual integration on light background */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-pink);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="min-h-screen flex flex-col items-center p-4 sm:p-8">
+        <!-- Header / Navigation -->
+        <header class="w-full max-w-4xl mb-8">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-center mb-4" style="color: var(--color-pink);">
+                Cooking Verbs in Spanish
+            </h1>
+            <p class="text-center text-sm mb-6 text-gray-600">
+                Practice the most common food-related verbs and terms!
+            </p>
+            <!-- Navigation background changed to white/light gray -->
+            <div id="nav-container" class="flex flex-wrap justify-center gap-2 sm:gap-4 p-3 rounded-xl shadow-lg bg-gray-100">
+                <!-- Navigation buttons will be rendered here -->
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <!-- Background changed to white -->
+        <main id="content-container" class="w-full max-w-4xl p-4 sm:p-8 rounded-2xl shadow-xl flex-grow mb-8 bg-white">
+            <!-- Content will be rendered here based on currentPage -->
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-4xl text-center py-4 border-t border-gray-300">
+            <p class="text-xs text-gray-500 mb-3">
+                © 2025 Spanish Lessons with María C. All rights reserved.
+            </p>
+            <a href="https://preply.com/en/tutor/5105409?utm_source=friend&utm_medium=ref&utm_campaign=stu_plg_plg_all_0_mul_xx_multiplesub_share-tutor-tutoring_1&utm_content=OTQ2NTAwNQ=="
+               target="_blank"
+               class="inline-block px-6 py-2 rounded-full font-bold text-sm btn-secondary">
+                Find your Spanish class here.
+            </a>
+        </footer>
+    </div>
+
+    <script type="module">
+        // Global variables for application state
+        let currentPage = 'home';
+        let currentCompletaIndex = 0;
+        let matchingGame = {
+            part: 1, // 1 or 2
+            pairs: [],
+            spanishSelected: null,
+            englishSelected: null,
+            matched: [],
+            spanishButtons: [],
+            englishButtons: []
+        };
+        const app = document.getElementById('app');
+        const contentContainer = document.getElementById('content-container');
+        const navContainer = document.getElementById('nav-container');
+
+        // --- DATA STRUCTURES ---
+
+        const VERB_DATA = {
+            // Conjugations (Present Simple)
+            conjugations: [
+                { verb: "cocinar", translation: "To cook", yo: "cocino", tu: "cocinas", el: "cocina", nosotros: "cocinamos", vosotros: "cocináis", ellos: "cocinan" },
+                { verb: "asar", translation: "To roast/grill", yo: "aso", tu: "asas", el: "asa", nosotros: "asamos", vosotros: "asáis", ellos: "asan" },
+                { verb: "hornear", translation: "To bake", yo: "horneo", tu: "horneas", el: "hornea", nosotros: "horneamos", vosotros: "horneáis", ellos: "hornean" },
+                { verb: "mezclar", translation: "To mix", yo: "mezclo", tu: "mezclas", el: "mezcla", nosotros: "mezclamos", vosotros: "mezcláis", ellos: "mezclan" },
+                { verb: "cortar", translation: "To cut", yo: "corto", tu: "cortas", el: "corta", nosotros: "cortamos", vosotros: "cortáis", ellos: "cortan" },
+                { verb: "comer", translation: "To eat", yo: "como", tu: "comes", el: "come", nosotros: "comemos", vosotros: "coméis", ellos: "comen" },
+                { verb: "beber", translation: "To drink", yo: "bebo", tu: "bebes", el: "bebe", nosotros: "bebemos", vosotros: "bebéis", ellos: "beben" },
+                // Irregular verbs: E>IE, E>I, E>Í
+                { verb: "hervir", translation: "To boil", yo: "hiervo", tu: "hierves", el: "hierve", nosotros: "hervimos", vosotros: "hervís", ellos: "hierven", irregular: true },
+                { verb: "freír", translation: "To fry", yo: "frío", tu: "fríes", el: "fríe", nosotros: "freímos", vosotros: "freís", ellos: "fríen", irregular: true },
+                { verb: "servir", translation: "To serve", yo: "sirvo", tu: "sirves", el: "sirve", nosotros: "servimos", vosotros: "servís", ellos: "sirven", irregular: true }
+            ],
+            // Vowel fill-in exercise (Consonants and correct vowels)
+            vowelFill: [
+                // CORRECCIÓN: "o i a" para 'cocinar' (C-o-C-i-n-a-R)
+                { verb: "cocinar", consonants: "c c n r", vowels: "o i a", img: "https://oleico.com/wp-content/uploads/2020/04/original-f1b09253436d73567fe915b8d1831ee5.jpeg", translation: "To cook" },
+                { verb: "asar", consonants: "s r", vowels: "a a", img: "https://trireceitas.com/wp-content/uploads/2024/10/tecnicas-para-asar-carne-a-la-parrilla-para-expertos.jpeg", translation: "To roast/grill" },
+                { verb: "hornear", consonants: "h r n r", vowels: "o e a", img: "https://tse2.mm.bing.net/th/id/OIP.H_lnZrv5DxkcKcbn4u9woAHaFk?cb=12&w=1920&h=1443&rs=1&pid=ImgDetMain&o=7&rm=3", translation: "To bake" },
+                { verb: "mezclar", consonants: "m z c l r", vowels: "e a", img: "https://concepto.de/wp-content/uploads/2016/04/mezcla-e1546216159406.jpg", translation: "To mix" },
+                { verb: "cortar", consonants: "c r t r", vowels: "o a", img: "https://img.freepik.com/foto-grafis/chef-cocinar-comida-cocina-restaurante-cortar-cocinar-cocinar_120499-10.jpg?size=626&ext=jpg", translation: "To cut" },
+                { verb: "comer", consonants: "c m r", vowels: "o e", img: "https://tse4.mm.bing.net/th/id/OIP.YdYBI-IT-djgiaQ5ZN71SgHaE8?cb=12&w=1500&h=1000&rs=1&pid=ImgDetMain&o=7&rm=3", translation: "To eat" },
+                { verb: "beber", consonants: "b b r", vowels: "e e", img: "https://www.vinetur.com/imagenes/2023/septiembre/23/beber-vino-tinto-drinking-red-wine.jpg", translation: "To drink" },
+                { verb: "hervir", consonants: "h r v r", vowels: "e i", img: "https://tse1.mm.bing.net/th/id/OIP.oTg9jRcUoyry5z-WbljMLgHaFj?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3", translation: "To boil" },
+                { verb: "freír", consonants: "f r r", vowels: "e í", img: "https://www.consumer.es/app/uploads/2024/05/freir-bien-alimentos-trucos.jpg", translation: "To fry" }, 
+                { verb: "servir", consonants: "s r v r", vowels: "e i", img: "https://tse1.mm.bing.net/th/id/OIP.SvSCz3rp86NNzrDm4e6cKAHaE7?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3", translation: "To serve" },
+            ],
+            // Matching pairs
+            matchingPairs: [
+                { spanish: "Cocinar", english: "To cook" },
+                { spanish: "Asar", english: "To roast" },
+                { spanish: "Hornear", english: "To bake" },
+                { spanish: "Mezclar", english: "To mix" },
+                { spanish: "Cortar", english: "To cut" },
+                { spanish: "Comer", english: "To eat" },
+                { spanish: "Beber", english: "To drink" },
+                { spanish: "Hervir", english: "To boil" },
+                { spanish: "Freír", english: "To fry" },
+                { spanish: "Servir", english: "To serve" },
+            ],
+            // Eggs section
+            eggStyles: [
+                { spanish: "Huevos cocidos / Huevos duros", english: "Boiled Eggs / Hard-boiled Eggs", img: "https://mindovermunch.com/wp-content/uploads/2020/05/Instant-Pot-Boiled-Eggs-1-feat.jpg" },
+                { spanish: "Huevos fritos / Huevos estrellados", english: "Fried Eggs", img: "https://elestimulo.com/wp-content/uploads/2023/05/pexels-daniel-torobekov-13689979.jpg" },
+                { spanish: "Huevos revueltos", english: "Scrambled Eggs", img: "https://th.bing.com/th/id/R.446a41006a1a5b14b77b87b6d2534c17?rik=%2fBicyhr9bABqnQ&pid=ImgRaw&r=0" },
+                { spanish: "Tortilla de huevo", english: "Omelette", img: "https://tse4.mm.bing.net/th/id/OIP.DKzwDKdkIWGTWdu7ertHzAHaE7?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" },
+                { spanish: "Huevos escalfados / Huevos pochados", english: "Poached Eggs", img: "https://www.cocinatis.com/archivos/202306/huevos-escaflados-microondas-1280x720x80xX.jpg" },
+            ]
+        };
+
+        // --- UTILITY FUNCTIONS ---
+
+        /** * Changes the page state and re-renders the content. 
+         * Exposed to window for use in HTML onclick attributes.
+         */
+        window.changePage = function(page) {
+            currentPage = page;
+            if (page === 'completa') {
+                currentCompletaIndex = 0;
+            }
+            if (page === 'empareja') {
+                window.initMatchingGame(1);
+            }
+            render();
+        }
+
+        /** Fisher-Yates shuffle algorithm */
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // --- RENDER FUNCTIONS ---
+
+        /** Renders the main navigation buttons. */
+        function renderNav() {
+            const buttons = [
+                { id: 'verbs', label: '1. Verbos', page: 'verbos' },
+                { id: 'completa', label: '2. Completa', page: 'completa' },
+                { id: 'empareja', label: '3. Empareja', page: 'empareja' },
+                { id: 'huevos', label: '4. Huevos', page: 'huevos' },
+            ];
+
+            navContainer.innerHTML = buttons.map(btn => `
+                <button
+                    onclick="changePage('${btn.page}')"
+                    class="btn-primary flex-grow text-sm sm:text-base ${currentPage === btn.page ? 'opacity-100' : 'opacity-70'}"
+                    /* Style adjustment for light theme */
+                    style="background-color: ${currentPage === btn.page ? 'var(--color-pink)' : '#ffffff'}; color: ${currentPage === btn.page ? 'var(--color-black)' : 'var(--color-black)'}; border: 2px solid var(--color-pink);"
+                >
+                    ${btn.label}
+                </button>
+            `).join('');
+
+            // Add 'Home' button if not on home page
+            if (currentPage !== 'home') {
+                 navContainer.innerHTML = `
+                    <button onclick="changePage('home')" class="btn-primary w-full sm:w-auto text-sm sm:text-base mb-2 sm:mb-0" style="background-color: var(--color-pink); color: var(--color-black);">
+                        ← Home
+                    </button>
+                    ` + navContainer.innerHTML;
+            }
+        }
+
+        /** Renders the Home page. */
+        function renderHome() {
+            contentContainer.innerHTML = `
+                <div class="text-center p-4 sm:p-8">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold mb-6" style="color: var(--color-pink);">Welcome to your Spanish class!</h2>
+                    <p class="text-xl text-gray-700 mb-8">
+                        Select an activity to practice Spanish verbs related to cooking and eating.
+                        <br class="hidden sm:block">
+                        ¡Buena suerte! (Good luck!)
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-6 rounded-xl border border-gray-300 hover:border-pink-500 transition duration-300 bg-gray-50">
+                            <h3 class="text-2xl font-bold mb-3" style="color: var(--color-pink);">1. Verbos & Conjugation</h3>
+                            <p class="text-gray-600 mb-4">Study the infinitive and the present simple conjugation for 10 verbs.</p>
+                            <button onclick="changePage('verbos')" class="btn-primary w-full">Go to Verbos</button>
+                        </div>
+                        <div class="p-6 rounded-xl border border-gray-300 hover:border-pink-500 transition duration-300 bg-gray-50">
+                            <h3 class="text-2xl font-bold mb-3" style="color: var(--color-pink);">2. Completa (Fill-in)</h3>
+                            <p class="text-gray-600 mb-4">Complete the verb using the correct vowels based on the image.</p>
+                            <button onclick="changePage('completa')" class="btn-primary w-full">Go to Completa</button>
+                        </div>
+                        <div class="p-6 rounded-xl border border-gray-300 hover:border-pink-500 transition duration-300 bg-gray-50">
+                            <h3 class="text-2xl font-bold mb-3" style="color: var(--color-pink);">3. Empareja (Matching)</h3>
+                            <p class="text-gray-600 mb-4">Match the Spanish verb with its correct English translation.</p>
+                            <button onclick="changePage('empareja')" class="btn-primary w-full">Go to Empareja</button>
+                        </div>
+                        <div class="p-6 rounded-xl border border-gray-300 hover:border-pink-500 transition duration-300 bg-gray-50">
+                            <h3 class="text-2xl font-bold mb-3" style="color: var(--color-pink);">4. Huevos (Eggs)</h3>
+                            <p class="text-gray-600 mb-4">Learn the Spanish names for 5 common egg preparations.</p>
+                            <button onclick="changePage('huevos')" class="btn-primary w-full">Go to Huevos</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /** Renders the Verbos (Conjugation) section. */
+        function renderVerbos() {
+            // Map the internal keys to the desired display pronouns
+            const pronounMap = {
+                'yo': 'Yo',
+                'tu': 'Tú',
+                'el': 'Él, ella, Ud.',
+                'nosotros': 'Nosotros/as',
+                'vosotros': 'Vosotros/as',
+                'ellos': 'Ellos, ellas, Uds.',
+            };
+
+            let html = `
+                <h2 class="text-3xl font-extrabold mb-8 text-center" style="color: var(--color-pink);">1. Spanish Food Verbs Conjugation (Present Simple)</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            `;
+
+            VERB_DATA.conjugations.forEach(verb => {
+                html += `
+                    <div class="p-4 rounded-xl shadow-lg border-2 border-gray-300 ${verb.irregular ? 'border-red-500' : ''} bg-gray-50">
+                        <h3 class="text-2xl font-bold mb-2 ${verb.irregular ? 'text-red-600' : ''}" style="color: var(--color-pink);">
+                            ${verb.verb.toUpperCase()} 
+                            <span class="text-base font-normal text-gray-600">(${verb.translation})</span>
+                            ${verb.irregular ? '<span class="text-xs ml-2 text-red-500 font-bold">IRREGULAR</span>' : ''}
+                        </h3>
+                        <div class="bg-white p-3 rounded-lg text-sm grid grid-cols-2 gap-x-4 gap-y-1">
+                            ${Object.entries(verb)
+                                .filter(([key]) => ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos'].includes(key))
+                                .map(([pronounKey, form]) => `
+                                <div class="flex justify-between items-center border-b border-gray-300 py-1">
+                                    <span class="font-semibold text-gray-600">${pronounMap[pronounKey]}</span>
+                                    <span class="font-extrabold" style="color: var(--color-pink);">${form}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            contentContainer.innerHTML = html;
+        }
+
+        /** Renders the Completa (Fill-in) section. */
+        function renderCompleta() {
+            const data = VERB_DATA.vowelFill[currentCompletaIndex];
+
+            if (!data) {
+                contentContainer.innerHTML = `
+                    <div class="text-center p-8">
+                        <h2 class="text-3xl font-extrabold mb-4" style="color: var(--color-pink);">Activity Finished!</h2>
+                        <p class="text-xl mb-6 text-gray-700">You have completed all the verbs in this section. ¡Bien hecho!</p>
+                        <button onclick="changePage('home')" class="btn-primary">Back to Home</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const consonantsArray = data.consonants.split(' ').map(c => c.trim()).filter(c => c.length > 0);
+            const totalLength = data.verb.length;
+            let verbStructure = '';
+            let vowelIndex = 0;
+            const correctVowelsLength = data.vowels.replace(/ /g, '').length;
+
+            for (let i = 0; i < totalLength; i++) {
+                const char = data.verb[i];
+                // Check if the character is a vowel (including accented vowels)
+                if ('aeiouáéíóú'.includes(char.toLowerCase())) {
+                    // Vowel - placeholder for input
+                    verbStructure += `<input type="text" maxlength="1" data-index="${vowelIndex++}" 
+                                            class="vowel-input w-8 h-10 text-center text-xl font-bold bg-gray-200 rounded-lg mx-0.5" 
+                                            style="color: var(--color-pink); border: 2px solid var(--color-black);" />`; /* Input background adjusted */
+                } else {
+                    // Consonant - fixed
+                    verbStructure += `<span class="w-8 h-10 flex items-center justify-center text-xl font-bold bg-gray-200 rounded-lg mx-0.5">${char.toUpperCase()}</span>`; /* Fixed background adjusted */
+                }
+            }
+
+
+            contentContainer.innerHTML = `
+                <h2 class="text-3xl font-extrabold mb-6 text-center" style="color: var(--color-pink);">2. Completa: Fill in the Vowels</h2>
+                <p class="text-center mb-6 text-gray-600">
+                    Word ${currentCompletaIndex + 1} of ${VERB_DATA.vowelFill.length}. (Faltan ${correctVowelsLength} vocales)
+                </p>
+
+                <div class="flex flex-col items-center">
+                    <!-- Image -->
+                    <div class="w-full max-w-sm h-64 mb-6 rounded-xl overflow-hidden shadow-xl border border-gray-300">
+                        <img src="${data.img}" alt="Image of ${data.verb}" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/400x256/ffffff/FF79AC?text=Image+Not+Found'" /* Placeholder background adjusted */
+                             class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Input Area -->
+                    <div id="verb-display" class="flex justify-center items-center mb-6">
+                        ${verbStructure}
+                    </div>
+                    
+                    <div id="feedback-completa" class="text-center mb-6 h-10 text-lg font-semibold text-green-700">
+                        <!-- Feedback and Translation will appear here -->
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex gap-4">
+                        <button id="check-btn" onclick="checkCompleta()" class="btn-primary w-28">Check</button>
+                        <button onclick="nextCompleta()" class="btn-secondary w-28">Next →</button>
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners for inputs
+            document.querySelectorAll('.vowel-input').forEach(input => {
+                input.addEventListener('input', () => {
+                    const feedback = document.getElementById('feedback-completa');
+                    feedback.textContent = '';
+                    // Restrict input to only vowels (including accented ones)
+                    input.value = input.value.toLowerCase().replace(/[^aáeéiíoóuúü]/g, ''); 
+                });
+            });
+        }
+
+        /** Checks the user's input in the Completa section. */
+        window.checkCompleta = function() {
+            const data = VERB_DATA.vowelFill[currentCompletaIndex];
+            if (!data) return;
+
+            const inputs = Array.from(document.querySelectorAll('.vowel-input'));
+            // Collects all input values and joins them into a single string (e.g., "oia")
+            const submittedVowels = inputs.map(input => input.value).join('');
+            // Gets the correct vowels string, removing spaces (e.g., "o i a" -> "oia")
+            const correctVowels = data.vowels.replace(/ /g, '');
+            const feedback = document.getElementById('feedback-completa');
+
+            if (submittedVowels === correctVowels) {
+                feedback.innerHTML = `¡Correcto! (${data.verb.toUpperCase()} - ${data.translation})`;
+                feedback.classList.remove('text-red-700');
+                feedback.classList.add('text-green-700');
+                inputs.forEach(input => input.style.border = '2px solid #34D399'); // Green border
+                document.getElementById('check-btn').disabled = true;
+            } else {
+                // Improved feedback for the user
+                feedback.textContent = `Incorrecto. Esperado: "${correctVowels.toUpperCase()}". Intentaste: "${submittedVowels.toUpperCase()}"`;
+                feedback.classList.remove('text-green-700');
+                feedback.classList.add('text-red-700');
+                inputs.forEach(input => input.style.border = '2px solid #F87171'); // Red border
+            }
+        }
+
+        /** Moves to the next verb in the Completa section. */
+        window.nextCompleta = function() {
+            currentCompletaIndex++;
+            renderCompleta();
+        }
+
+        // --- EMPAREJA (MATCHING) FUNCTIONS ---
+
+        /** * Initializes the matching game for a specific part (1 or 2). 
+         * Exposed to window for use in the "Start Part 2" button.
+         */
+        window.initMatchingGame = function(part) {
+            matchingGame.part = part;
+            matchingGame.matched = [];
+            matchingGame.spanishSelected = null;
+            matchingGame.englishSelected = null;
+
+            const startIndex = (part - 1) * 5;
+            const currentPairs = VERB_DATA.matchingPairs.slice(startIndex, startIndex + 5);
+            matchingGame.pairs = shuffleArray(currentPairs); // Store unshuffled for reference
+
+            matchingGame.spanishButtons = shuffleArray(currentPairs.map(p => p.spanish));
+            matchingGame.englishButtons = shuffleArray(currentPairs.map(p => p.english));
+
+            renderEmpareja();
+        }
+
+        /** Handles a click on a matching button. */
+        window.handleMatchClick = function(type, word, element) {
+            if (matchingGame.matched.includes(word)) return;
+
+            const previousSelected = type === 'spanish' ? matchingGame.spanishSelected : matchingGame.englishSelected;
+            // The data-word attribute value might need escaping if it contains quotes, but since the words are simple, it should be fine.
+            const previousElement = document.querySelector(`.match-button[data-type="${type}"][data-word="${previousSelected}"]`);
+
+            // Deselect previously selected of the same type
+            if (previousElement && previousElement !== element) {
+                previousElement.classList.remove('ring-4', 'ring-black'); // Ring color changed to black for visibility
+            }
+            
+            // Toggle selection
+            if (word === previousSelected) {
+                // Deselect
+                element.classList.remove('ring-4', 'ring-black');
+                if (type === 'spanish') matchingGame.spanishSelected = null;
+                if (type === 'english') matchingGame.englishSelected = null;
+            } else {
+                // Select
+                element.classList.add('ring-4', 'ring-black');
+                if (type === 'spanish') matchingGame.spanishSelected = word;
+                if (type === 'english') matchingGame.englishSelected = word;
+            }
+
+            checkMatch();
+        }
+
+        /** Checks if the two selected words form a correct match. */
+        function checkMatch() {
+            const S = matchingGame.spanishSelected;
+            const E = matchingGame.englishSelected;
+
+            if (S && E) {
+                const match = matchingGame.pairs.find(p => p.spanish === S && p.english === E);
+
+                // Use the selector that handles potential quotes in word (if any, though none currently exist)
+                const sBtn = document.querySelector(`.match-button[data-type="spanish"][data-word="${S}"]`);
+                const eBtn = document.querySelector(`.match-button[data-type="english"][data-word="${E}"]`);
+                
+                // Define the classes based on user request (Light Apple Green: bg-green-300)
+                const CORRECT_COLOR_CLASSES = ['bg-green-300', 'hover:bg-green-300'];
+                const HOVER_CLASS_MATCHING = 'hover:brightness-90';
+
+                if (match) {
+                    // Correct Match (Light Apple Green)
+                    matchingGame.matched.push(S, E);
+                    
+                    // Spanish Button Styling (using classList to retain size-defining classes)
+                    sBtn.style.backgroundColor = ''; // Clear inline pink style
+                    sBtn.classList.remove(HOVER_CLASS_MATCHING, 'ring-4', 'ring-black');
+                    sBtn.classList.add(...CORRECT_COLOR_CLASSES, 'cursor-default', 'shadow-none');
+                    sBtn.onclick = null;
+                    sBtn.disabled = true;
+
+                    // English Button Styling
+                    eBtn.style.backgroundColor = ''; // Clear inline pink style
+                    eBtn.classList.remove(HOVER_CLASS_MATCHING, 'ring-4', 'ring-black');
+                    eBtn.classList.add(...CORRECT_COLOR_CLASSES, 'cursor-default', 'shadow-none');
+                    eBtn.onclick = null;
+                    eBtn.disabled = true;
+
+                } else {
+                    // Incorrect Match (Red flash)
+                    sBtn.classList.remove(HOVER_CLASS_MATCHING); // Remove hover effect during flash
+                    sBtn.classList.add('bg-red-500', 'text-black');
+                    eBtn.classList.remove(HOVER_CLASS_MATCHING); // Remove hover effect during flash
+                    eBtn.classList.add('bg-red-500', 'text-black');
+                    setTimeout(() => {
+                        // Revert styling
+                        sBtn.classList.remove('bg-red-500', 'text-black', 'ring-4', 'ring-black');
+                        eBtn.classList.remove('bg-red-500', 'text-black', 'ring-4', 'ring-black');
+                        
+                        // Reapply the base pink color via inline style and hover class
+                        sBtn.style.backgroundColor = 'var(--color-pink)';
+                        sBtn.classList.add(HOVER_CLASS_MATCHING);
+                        eBtn.style.backgroundColor = 'var(--color-pink)';
+                        eBtn.classList.add(HOVER_CLASS_MATCHING);
+                    }, 500);
+                }
+
+                // Reset selections
+                matchingGame.spanishSelected = null;
+                matchingGame.englishSelected = null;
+
+                // Check for game completion
+                // The logic for part switching is complex and relies on the total number of matched items.
+                const totalMatched = VERB_DATA.matchingPairs.length;
+                const currentMatched = matchingGame.matched.length; // This is double the pairs matched (Spanish + English word)
+
+                if (currentMatched === totalMatched * 2) {
+                    // Total game completion (10 pairs * 2 = 20 matched items)
+                    renderEmpareja();
+                } else if (match && currentMatched === matchingGame.part * 5 * 2) {
+                    // Current part completion (5 pairs * 2 = 10 matched items per part)
+                    if (matchingGame.part === 1) {
+                         setTimeout(() => window.initMatchingGame(2), 700);
+                    }
+                }
+            }
+        }
+
+
+        /** Renders the Empareja (Matching) section. */
+        function renderEmpareja() {
+            const currentPartPairs = VERB_DATA.matchingPairs.slice((matchingGame.part - 1) * 5, matchingGame.part * 5);
+            const completedCount = matchingGame.matched.filter(w => currentPartPairs.some(p => p.spanish === w || p.english === w)).length;
+            
+            // Check overall completion (Total 10 pairs = 20 matched items)
+            const overallCompletedCount = matchingGame.matched.length;
+            const overallTotal = VERB_DATA.matchingPairs.length * 2;
+
+
+            let html = `
+                <h2 class="text-3xl font-extrabold mb-4 text-center" style="color: var(--color-pink);">3. Empareja: Match the Verbs</h2>
+                <p class="text-center text-xl font-bold mb-6 text-gray-700">
+                    Parte ${matchingGame.part} de 2 
+                    <span class="text-sm text-gray-500">(${completedCount / 2} / 5 emparejados)</span>
+                </p>
+            `;
+            
+            if (overallCompletedCount === overallTotal) { // Check if all 10 pairs are matched in total
+                 html += `
+                    <div class="text-center p-8">
+                        <h2 class="text-4xl font-extrabold mb-4 text-green-700">¡Actividad Terminada!</h2>
+                        <p class="text-xl mb-6 text-gray-700">Has emparejado correctamente los 10 verbos. ¡Perfecto!</p>
+                        <button onclick="changePage('home')" class="btn-primary">Volver al Inicio</button>
+                    </div>
+                `;
+            } else {
+                
+                // Define classes for consistency and size retention
+                // Note: We avoid setting a Tailwind bg-* class here to allow the inline style to define the pink color.
+                const BASE_CLASSES_MATCHING = 'match-button w-full transition duration-150 rounded-lg p-3 text-lg font-bold shadow-sm text-black cursor-pointer';
+                const HOVER_CLASS_MATCHING = 'hover:brightness-90'; // To simulate darkening the pink button on hover
+                
+                // Light apple green for matched buttons
+                const MATCHED_CLASSES = 'bg-green-300 hover:bg-green-300 cursor-default shadow-none';
+
+                const spanishCols = matchingGame.spanishButtons.map(word => {
+                    const isMatched = matchingGame.matched.includes(word);
+                    return `
+                        <button
+                            class="${BASE_CLASSES_MATCHING} ${isMatched ? MATCHED_CLASSES : HOVER_CLASS_MATCHING}"
+                            style="${isMatched ? '' : 'background-color: var(--color-pink);'}"
+                            data-type="spanish"
+                            data-word="${word}"
+                            onclick="handleMatchClick('spanish', '${word}', this)"
+                            ${isMatched ? 'disabled' : ''}
+                        >
+                            ${word}
+                        </button>
+                    `;
+                }).join('');
+
+                const englishCols = matchingGame.englishButtons.map(word => {
+                    const isMatched = matchingGame.matched.includes(word);
+                    return `
+                        <button
+                            class="${BASE_CLASSES_MATCHING} ${isMatched ? MATCHED_CLASSES : HOVER_CLASS_MATCHING}"
+                            style="${isMatched ? '' : 'background-color: var(--color-pink);'}"
+                            data-type="english"
+                            data-word="${word}"
+                            onclick="handleMatchClick('english', '${word}', this)"
+                            ${isMatched ? 'disabled' : ''}
+                        >
+                            ${word}
+                        </button>
+                    `;
+                }).join('');
+
+                html += `
+                    <div class="grid grid-cols-2 gap-4 sm:gap-8">
+                        <!-- Spanish Column -->
+                        <div class="flex flex-col gap-3">
+                            <h3 class="text-xl font-bold mb-2 text-center" style="color: var(--color-black);">ESPAÑOL</h3>
+                            ${spanishCols}
+                        </div>
+                        <!-- English Column -->
+                        <div class="flex flex-col gap-3">
+                            <h3 class="text-xl font-bold mb-2 text-center" style="color: var(--color-black);">INGLÉS</h3>
+                            ${englishCols}
+                        </div>
+                    </div>
+                    ${matchingGame.part === 1 && overallCompletedCount === 10 ? `
+                        <div class="text-center mt-8">
+                            <button onclick="initMatchingGame(2)" class="btn-primary">Empezar Parte 2 →</button>
+                        </div>
+                    ` : ''}
+                `;
+            }
+
+            contentContainer.innerHTML = html;
+        }
+
+        /** Renders the Huevos (Eggs) section. */
+        function renderHuevos() {
+            let html = `
+                <h2 class="text-3xl font-extrabold mb-8 text-center" style="color: var(--color-pink);">4. Huevos: Common Egg Preparations</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            `;
+
+            VERB_DATA.eggStyles.forEach(egg => {
+                html += `
+                    <div class="rounded-xl shadow-lg border border-gray-300 overflow-hidden bg-white">
+                        <div class="h-40 w-full overflow-hidden">
+                            <img src="${egg.img}" alt="Image of ${egg.spanish}" 
+                                 onerror="this.onerror=null;this.src='https://placehold.co/400x160/ffffff/FF79AC?text=Image+Not+Found'" /* Placeholder background adjusted */
+                                 class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold mb-1" style="color: var(--color-pink);">${egg.spanish}</h3>
+                            <p class="text-gray-600 font-semibold">${egg.english}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            contentContainer.innerHTML = html;
+        }
+
+
+        /** Main render function based on the current page state. */
+        function render() {
+            renderNav();
+            switch (currentPage) {
+                case 'home':
+                    renderHome();
+                    break;
+                case 'verbos':
+                    renderVerbos();
+                    break;
+                case 'completa':
+                    renderCompleta();
+                    break;
+                case 'empareja':
+                    renderEmpareja();
+                    break;
+                case 'huevos':
+                    renderHuevos();
+                    break;
+                default:
+                    renderHome();
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            render(); // Start the app on the home page
+        });
+    </script>
+</body>
+</html>

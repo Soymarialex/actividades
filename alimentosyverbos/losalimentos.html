@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanish Food Vocabulary - Lecciones con María C.</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Enlace a Google Font para simular "Platform Medium" con una fuente legible y limpia (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Definición de colores principales */
+        :root {
+            --color-pink: #FF79AC;
+            --color-black: #121118;
+            --color-success: #34D399; /* Verde claro para éxito */
+            --color-error: #F87171; /* Rojo claro para error */
+            --color-background: white; /* Nuevo color de fondo */
+            --color-foreground: #121118; /* Nuevo color de texto principal */
+        }
+        
+        /* Estilos personalizados para la fuente y el fondo */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-background); /* CAMBIO: Fondo blanco */
+            color: var(--color-foreground); /* CAMBIO: Texto negro */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Clase para los botones de acción principal (CTA) */
+        .cta-button {
+            background-color: var(--color-pink);
+            color: var(--color-black); /* Mantener texto negro en el botón rosa */
+            font-weight: 800; /* Extra-bold */
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 121, 172, 0.6);
+        }
+        
+        /* Contenedor principal para centrar el contenido */
+        #content-container {
+            max-width: 900px;
+            width: 95%;
+            padding: 1rem;
+            flex-grow: 1;
+        }
+
+        /* Estilo para las imágenes de vocabulario (Corrección: tamaño más pequeño y contain) */
+        .vocab-image {
+            width: 100%;
+            max-width: 300px; /* Limitar ancho para que no sean enormes en desktop */
+            height: 150px; /* Tamaño fijo más pequeño */
+            object-fit: contain; /* Asegura que la imagen completa se vea */
+            background-color: #f7f7f7; /* Fondo ligero para cuando object-fit: contain se usa */
+            border-radius: 0.75rem;
+        }
+
+        /* Estilos específicos para la actividad de Emparejar */
+        .match-button {
+            background-color: white; /* CAMBIO: Fondo blanco para los botones sin seleccionar */
+            border: 2px solid var(--color-pink);
+            color: var(--color-black); /* CAMBIO: Texto negro */
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .match-button.selected {
+            background-color: var(--color-pink);
+            color: var(--color-black);
+        }
+        .match-button.correct {
+            background-color: var(--color-success); /* Verde */
+            color: var(--color-black);
+            border-color: var(--color-success);
+            pointer-events: none; /* Deshabilitar después de coincidir */
+        }
+        .match-button.incorrect {
+            background-color: var(--color-error); /* Rojo */
+            border-color: var(--color-error);
+        }
+    </style>
+</head>
+<body class="selection:bg-pink-300 selection:text-black">
+
+    <!-- Contenedor principal de la aplicación -->
+    <div id="content-container">
+        <!-- Encabezado -->
+        <header class="text-center mb-8 pt-4">
+            <h1 class="text-5xl font-extrabold tracking-tight text-black mb-2">
+                <span style="color:var(--color-pink);">Spanish</span> Vocabulary Practice
+            </h1>
+        </header>
+
+        <!-- Contenido dinámico (donde se cargan las vistas) -->
+        <main id="app-view" class="p-4 rounded-xl shadow-2xl bg-white border-t-4 border-b-4" style="border-color: var(--color-pink);">
+            <!-- El contenido se inyectará aquí -->
+        </main>
+    </div>
+
+    <!-- Pie de página (Footer) -->
+    <footer class="w-full text-center py-6 border-t mt-8 border-gray-200">
+        <p class="text-sm text-gray-600 mb-4">
+            © 2025 Spanish Lessons with María C. All rights reserved.
+        </p>
+        <a id="tutor-link" href="https://preply.com/en/tutor/5105409?utm_source=friend&utm_medium=ref&utm_campaign=stu_plg_plg_all_0_mul_xx_multiplesub_share-tutor-tutoring_1&utm_content=OTQ2NTAwNQ==" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           class="inline-block px-8 py-3 rounded-full cta-button">
+            Find your Spanish class here.
+        </a>
+    </footer>
+
+    <script>
+        // --- DATA SETUP ---
+        const APP_VIEW = document.getElementById('app-view');
+
+        // Datos para la actividad de vegetales (Vocales/Consonantes)
+        const VEGETALES_DATA = [
+            { es: 'Zanahoria', en: 'Carrot', img: 'https://tse2.mm.bing.net/th/id/OIP.vr26BMalU5ytgmHGsvfeRwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', mask: 'Z_n_h_r_a' },
+            { es: 'Lechuga', en: 'Lettuce', img: 'https://th.bing.com/th/id/R.89004d5360cddde17a90a67b5edd63d4?rik=Mq2MEF%2bHxYFDqg&riu=http%3a%2f%2feslasalud.com%2fwp-content%2fuploads%2f2015%2f06%2flechuga.jpg&ehk=W4KVhdQ5RfJDAU179PV2aL8PVsq1J2vycxAFxptEMC0%3d&risl=&pid=ImgRaw&r=0', mask: 'L_ch_g_' },
+            { es: 'Espinaca', en: 'Spinach', img: 'https://tse3.mm.bing.net/th/id/OIP.vzEL_6-X5K9MTbd5mCLAXwHaE8?rs=1&pid=ImgDetMain&o=7&rm=3', mask: '_sp_n_c_' },
+            { es: 'Brócoli', en: 'Broccoli', img: 'https://tse4.mm.bing.net/th/id/OIP.hnnDYFAX4CVLyyiJomgDBgHaFH?rs=1&pid=ImgDetMain&o=7&rm=3', mask: 'Br_c_l_' },
+            { es: 'Pepino', en: 'Cucumber', img: 'https://tse1.mm.bing.net/th/id/OIP.9i_-MX9O2_kMeKxSihVdTAHaFL?rs=1&pid=ImgDetMain&o=7&rm=3', mask: 'P_p_n_' },
+            { es: 'Calabacín', en: 'Zucchini', img: 'https://tse2.mm.bing.net/th/id/OIP.KxdRFmagIS7xSIsBzY651AHaEK?rs=1&pid=ImgDetMain&o=7&rm=3', mask: 'C_l_b_c_n' },
+            { es: 'Pimiento', en: 'Pepper', img: 'https://alchetron.com/cdn/pimiento-27691757-2543-46e2-971c-93446cb2a7b-resize-750.jpeg', mask: 'P_m__nt_' },
+            { es: 'Tomate', en: 'Tomato', img: 'https://www.infoescola.com/wp-content/uploads/2011/01/tomate_345187874-768x627.jpg', mask: 'T_m_t_' },
+            { es: 'Cebolla', en: 'Onion', img: 'https://th.bing.com/th/id/R.86417228fdc5000da749847260b2e16d?rik=lbDzVAHMQagC%2fQ&riu=http%3a%2f%2fwww.vivirbienesunplacer.com%2fwp-content%2fuploads%2fcebolla-1.jpg&ehk=fQmgcdZvfWju1L7P34WcSvZuoFHyki%2fUkwNcqQi7ed8%3d&risl=&pid=ImgRaw&r=0', mask: 'C_b_ll_' },
+            { es: 'Ajo', en: 'Garlic', img: 'https://tse1.mm.bing.net/th/id/OIP.l9eennhXiFvvFyYalnABewHaHa?w=600&h=600&rs=1&pid=ImgDetMain&o=7&rm=3', mask: '_j_' }
+        ];
+
+        // Datos para la actividad de otros alimentos (Primera letra)
+        const OTROS_ALIMENTOS_DATA = [
+            { es: 'Jamón', en: 'Ham', img: 'https://t4.ftcdn.net/jpg/00/38/63/69/360_F_38636933_UuWfiVqMwrTVbqGZ7PBIAmfsSvMuKsie.jpg', mask: 'J____' },
+            { es: 'Salchicha', en: 'Sausage', img: 'https://img.freepik.com/premium-photo/fresh-sausage-isolated-white-background-sausage-hot-dog_958904-629.jpg', mask: 'S________' },
+            { es: 'Queso', en: 'Cheese', img: 'https://th.bing.com/th/id/R.c5dc8373e45c78e510a4091f88fd8cd7?rik=CP%2fHrDB9I%2fhg9A&riu=http%3a%2f%2fimagenpng.com%2fwp-content%2fuploads%2f2015%2f03%2fquesos2.gif&ehk=XhMnpBf8Vun0uoEpvE9ycd3MMKtV1tw%2bAYlT5PEAmto%3d&risl=&pid=ImgRaw&r=0', mask: 'Q____' },
+            { es: 'Arroz', en: 'Rice', img: 'https://4.bp.blogspot.com/-Vg1oK9AdaGo/WCzUn6B8_UI/AAAAAAAAAIM/d3YgGOJgX_Iodd-fuQyE9JxeiVP4iOmCQCLcB/s1600/arroz-choco-krispis.jpg', mask: 'A____' },
+            { es: 'Pasta', en: 'Pasta', img: 'https://tse1.mm.bing.net/th/id/OIP.PqlBKVDUqI-zUwESTXOMfAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3', mask: 'P____' },
+            { es: 'Pan', en: 'Bread', img: 'https://www.webconsultas.com/sites/default/files/styles/wc_adaptive_image__small/public/media/0d/temas/pan_0.jpg.webp', mask: 'P__' },
+            { es: 'Huevos', en: 'Eggs', img: 'https://www.gallinaponedora.com/wp-content/uploads/2019/11/tipos-de-huevos-4.jpg', mask: 'H_____' },
+            { es: 'Leche', en: 'Milk', img: 'https://img.freepik.com/fotos-premium/vaso-leche_398492-9766.jpg', mask: 'L____' },
+            { es: 'Mantequilla', en: 'Butter', img: 'https://mejorconsalud.as.com/wp-content/uploads/2013/12/mantequilla-comer-scaled.jpg', mask: 'M__________' }
+        ];
+
+        // Datos para la actividad de carnes (Emparejar)
+        const CARNES_DATA = [
+            { es: 'Carne', en: 'Meat' },
+            { es: 'Pollo', en: 'Chicken' },
+            { es: 'Res', en: 'Beef' },
+            { es: 'Cerdo', en: 'Pork' }, 
+            { es: 'Cordero', en: 'Lamb' },
+            { es: 'Pavo', en: 'Turkey' }, 
+            { es: 'Tocino', en: 'Bacon' },
+            { es: 'Pato', en: 'Duck' },
+            { es: 'Conejo', en: 'Rabbit' },
+            { es: 'Pescado', en: 'Fish' },
+            { es: 'Mariscos', en: 'Seafood' } 
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let appState = {
+            currentView: 'home',
+            activityData: null,
+            currentIndex: 0,
+            selectedMatchButton: null,
+            matchedPairs: 0,
+            // Nota: Esta variable se usa genéricamente para la parte de cualquier actividad de emparejamiento dividida.
+            vegetalesMatchPart: 1 
+        };
+
+        // --- UTILITY FUNCTIONS ---
+
+        /** Mezcla un array (Algoritmo de Fisher-Yates) */
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- VIEW RENDERING FUNCTIONS ---
+
+        /** Muestra la vista principal de selección de categorías */
+        function showHome() {
+            appState.currentView = 'home';
+            // Resetea la parte de emparejar al volver al inicio
+            appState.vegetalesMatchPart = 1; 
+
+            APP_VIEW.innerHTML = `
+                <h2 class="text-4xl font-bold text-center mb-10" style="color:var(--color-pink);">Select a Category</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button onclick="showActivity('vegetales', 1)" class="p-6 rounded-xl cta-button text-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        Vegetales (Vegetables)
+                    </button>
+                    <button onclick="showActivity('carnes', 2, 1)" class="p-6 rounded-xl cta-button text-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        Carnes (Meats)
+                    </button>
+                    <button onclick="showActivity('otros alimentos', 1)" class="p-6 rounded-xl cta-button text-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        Otros alimentos (Other Foods)
+                    </button>
+                </div>
+            `;
+        }
+
+        /**
+         * Navega a una actividad específica.
+         * @param {string} category - 'vegetales', 'carnes', 'otros alimentos'.
+         * @param {number} activityNum - 1 (Completa) o 2 (Empareja).
+         * @param {number} [matchPart=1] - Solo para actividades divididas: 1 o 2.
+         */
+        function showActivity(category, activityNum, matchPart = 1) {
+            appState.currentView = `${category}-act${activityNum}`;
+            appState.currentIndex = 0;
+            appState.selectedMatchButton = null;
+            appState.matchedPairs = 0;
+            appState.vegetalesMatchPart = matchPart; // Actualizar la parte
+
+            let data, title;
+
+            if (category === 'vegetales') {
+                data = VEGETALES_DATA;
+                if (activityNum === 1) {
+                    title = 'Actividad 1: Completa la Palabra (Vegetales)';
+                } else {
+                    title = `Actividad 2: Empareja las Palabras (Vegetales - Parte ${matchPart})`;
+                }
+            } else if (category === 'carnes') {
+                data = CARNES_DATA;
+                activityNum = 2; // Siempre match para carnes
+                // ELIMINADO: "Actividad Única: "
+                title = `Empareja las Palabras (Carnes - Parte ${matchPart})`;
+            } else if (category === 'otros alimentos') {
+                data = OTROS_ALIMENTOS_DATA;
+                if (activityNum === 1) {
+                    title = 'Actividad 1: Completa la Palabra (Otros Alimentos)';
+                } else {
+                    title = `Actividad 2: Empareja las Palabras (Otros Alimentos - Parte ${matchPart})`;
+                }
+            }
+
+            const backButton = `<button onclick="showHome()" class="text-gray-600 hover:text-black transition duration-200 mb-4 flex items-center">
+                                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                                    Back to Categories
+                                </button>`;
+            
+            let navButtons = '';
+            // Se mantiene la condición, ya que 'carnes' no tiene Activity 1.
+            if (category !== 'carnes') { 
+                 navButtons = `<div class="flex justify-center space-x-4 mb-6">
+                    <button onclick="showActivity('${category}', 1, 1)" class="px-4 py-2 rounded-lg text-sm transition duration-200 ${activityNum === 1 ? 'cta-button' : 'bg-gray-200 text-black hover:bg-gray-300'}">
+                        Activity 1
+                    </button>
+                    <!-- Asegura que al hacer clic en Activity 2, siempre inicia en la parte 1 -->
+                    <button onclick="showActivity('${category}', 2, 1)" class="px-4 py-2 rounded-lg text-sm transition duration-200 ${activityNum === 2 ? 'cta-button' : 'bg-gray-200 text-black hover:bg-gray-300'}">
+                        Activity 2
+                    </button>
+                </div>`;
+            }
+
+            APP_VIEW.innerHTML = `
+                ${backButton}
+                <h2 class="text-3xl font-bold text-center mb-6" style="color:var(--color-pink);">${title}</h2>
+                ${navButtons}
+                <div id="activity-content"></div>
+            `;
+
+            if (activityNum === 1) {
+                initCompleta(data);
+            } else {
+                initEmpareja(data, category, matchPart);
+            }
+        }
+
+        // --- ACTIVITY 1: COMPLETA LA PALABRA LOGIC ---
+
+        function initCompleta(data) {
+            appState.activityData = data;
+            renderCompletaItem();
+        }
+
+        function renderCompletaItem() {
+            const data = appState.activityData;
+            const index = appState.currentIndex;
+            const item = data[index];
+            const isFinished = item.completed || false;
+            
+            const content = document.getElementById('activity-content');
+            content.innerHTML = `
+                <div class="flex flex-col items-center p-4">
+                    <p class="text-lg text-gray-700 mb-4">${index + 1} of ${data.length}</p>
+                    <!-- Se agregó mx-auto para centrar la imagen y se ajustó el tamaño del placeholder -->
+                    <img src="${item.img}" alt="${item.es}" class="vocab-image rounded-xl mb-6 mx-auto" onerror="this.onerror=null; this.src='https://placehold.co/300x150/121118/FF79AC?text=Image+Not+Found'" />
+
+                    <div class="text-center mb-6">
+                        <p class="text-xl font-medium text-gray-700">Complete the word:</p>
+                        <p id="word-hint" class="text-3xl font-extrabold tracking-widest mt-2" style="color:var(--color-pink);">${item.mask.toUpperCase()}</p>
+                    </div>
+
+                    <div class="flex flex-col items-center w-full max-w-sm space-y-4">
+                        <input type="text" id="answer-input" placeholder="Type your answer here..."
+                               class="w-full p-3 rounded-lg text-lg text-black bg-gray-100 border-2 border-transparent focus:border-pink-500 transition duration-200 uppercase"
+                               onkeypress="if(event.key === 'Enter') checkCompletaAnswer()"
+                               ${isFinished ? 'disabled' : ''}>
+                        
+                        <button id="check-btn" onclick="checkCompletaAnswer()" 
+                                class="w-full p-3 rounded-full cta-button ${isFinished ? 'opacity-50 cursor-not-allowed' : ''}"
+                                ${isFinished ? 'disabled' : ''}>
+                            Check Answer
+                        </button>
+                        
+                        <div id="feedback-message" class="text-center text-xl font-bold transition-opacity duration-300">
+                            ${isFinished ? `<span style="color:var(--color-success);">Correct! (${item.en})</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-8 pt-4 border-t border-gray-300">
+                    <button onclick="navigateCompleta(-1)" class="px-6 py-2 rounded-full bg-gray-200 text-black hover:bg-gray-300 transition duration-200">
+                        Previous
+                    </button>
+                    <button onclick="navigateCompleta(1)" class="px-6 py-2 rounded-full cta-button">
+                        Next
+                    </button>
+                </div>
+            `;
+            if (!isFinished) {
+                document.getElementById('answer-input').focus();
+            }
+        }
+
+        function checkCompletaAnswer() {
+            const data = appState.activityData;
+            const index = appState.currentIndex;
+            const item = data[index];
+            const input = document.getElementById('answer-input');
+            const feedback = document.getElementById('feedback-message');
+            const checkBtn = document.getElementById('check-btn');
+
+            if (input.disabled) return;
+
+            const guess = input.value.trim().toLowerCase().replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u');
+            const correct = item.es.toLowerCase().replace(/á/g, 'a').replace(/é/g, 'e').replace(/í/g, 'i').replace(/ó/g, 'o').replace(/ú/g, 'u');
+
+            if (guess === correct) {
+                feedback.innerHTML = `<span style="color:var(--color-success);">Correct! (${item.en})</span>`;
+                feedback.classList.remove('text-red-500');
+                feedback.classList.add('text-green-400');
+                input.disabled = true;
+                checkBtn.disabled = true;
+                checkBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                data[index].completed = true;
+            } else {
+                feedback.innerHTML = `<span style="color:var(--color-error);">Try again!</span>`;
+                feedback.classList.remove('text-green-400');
+                feedback.classList.add('text-red-500');
+            }
+        }
+
+        function navigateCompleta(direction) {
+            const data = appState.activityData;
+            let newIndex = appState.currentIndex + direction;
+
+            if (newIndex >= 0 && newIndex < data.length) {
+                appState.currentIndex = newIndex;
+                renderCompletaItem();
+            } else if (newIndex >= data.length) {
+                // Ir a la siguiente actividad si existe
+                if (appState.currentView.startsWith('vegetales')) {
+                    // Pasa directamente a la Actividad 2 (Emparejar), Parte 1
+                    showActivity('vegetales', 2, 1); 
+                } else if (appState.currentView.startsWith('otros alimentos')) {
+                    // Pasa directamente a la Actividad 2 (Emparejar), Parte 1
+                    showActivity('otros alimentos', 2, 1);
+                } else {
+                    showHome(); // Volver a inicio si no hay más
+                }
+            }
+        }
+
+        // --- ACTIVITY 2: EMPAREJA LAS PALABRAS LOGIC ---
+
+        /**
+         * Inicializa la actividad de Emparejar.
+         * @param {Array} data - El array de datos de la categoría.
+         * @param {string} category - La categoría actual ('vegetales', 'carnes', etc.).
+         * @param {number} part - 1 o 2 (solo relevante para actividades divididas).
+         */
+        function initEmpareja(data, category, part) {
+            let filteredData = data.map(item => ({ es: item.es, en: item.en }));
+            
+            // Lógica para dividir Vegetales en 2 partes (5 y 5)
+            if (category === 'vegetales' && data.length > 5) {
+                const halfway = Math.ceil(data.length / 2);
+                if (part === 1) {
+                    filteredData = filteredData.slice(0, halfway); // Primeros 5 elementos
+                } else if (part === 2) {
+                    filteredData = filteredData.slice(halfway); // Últimos 5 elementos
+                }
+            }
+            
+            // Lógica para dividir Carnes en 2 partes (6 y el resto)
+            if (category === 'carnes' && data.length > 6) {
+                const part1Size = 6;
+                if (part === 1) {
+                    filteredData = filteredData.slice(0, part1Size); // Primeros 6 elementos
+                } else if (part === 2) {
+                    filteredData = filteredData.slice(part1Size); // Resto (5 elementos)
+                }
+            }
+
+            // NUEVA Lógica para dividir Otros Alimentos en 2 partes (5 y el resto)
+            if (category === 'otros alimentos' && data.length > 5) {
+                const part1Size = 5;
+                if (part === 1) {
+                    filteredData = filteredData.slice(0, part1Size); // Primeros 5 elementos
+                } else if (part === 2) {
+                    filteredData = filteredData.slice(part1Size); // Resto (4 elementos)
+                }
+            }
+            
+            appState.activityData = filteredData;
+            appState.matchedPairs = 0;
+            appState.selectedMatchButton = null;
+
+            // Re-indexar los IDs de los elementos filtrados
+            const spanishWords = shuffle(filteredData.map((item, index) => ({ text: item.es, lang: 'es', id: index })));
+            const englishWords = shuffle(filteredData.map((item, index) => ({ text: item.en, lang: 'en', id: index })));
+
+            renderEmparejaGrid(spanishWords, englishWords, category, part);
+        }
+
+        function renderEmparejaGrid(spanishWords, englishWords, category, part) {
+            const content = document.getElementById('activity-content');
+            
+            let navigationButtons = '';
+            
+            // Lógica para el botón de navegación/siguiente parte
+            if (category === 'vegetales' && part === 1) {
+                navigationButtons = `
+                    <button id="next-part-btn" onclick="showActivity('vegetales', 2, 2)" 
+                            class="mt-8 px-6 py-2 rounded-full cta-button hidden">
+                        Ir a la Parte 2
+                    </button>
+                `;
+            } else if (category === 'carnes' && part === 1 && CARNES_DATA.length > 6) { 
+                // Si es Carnes, Parte 1, y hay suficientes datos para una Parte 2
+                navigationButtons = `
+                    <button id="next-part-btn" onclick="showActivity('carnes', 2, 2)" 
+                            class="mt-8 px-6 py-2 rounded-full cta-button hidden">
+                        Ir a la Parte 2
+                    </button>
+                `;
+            } else if (category === 'otros alimentos' && part === 1 && OTROS_ALIMENTOS_DATA.length > 5) { 
+                // Si es Otros Alimentos, Parte 1, y hay suficientes datos para una Parte 2
+                navigationButtons = `
+                    <button id="next-part-btn" onclick="showActivity('otros alimentos', 2, 2)" 
+                            class="mt-8 px-6 py-2 rounded-full cta-button hidden">
+                        Ir a la Parte 2
+                    </button>
+                `;
+            } else {
+                 // Si es Parte 2 de cualquier actividad dividida, o una actividad única/final
+                 navigationButtons = `
+                    <button id="completion-btn" onclick="showHome()" 
+                            class="mt-8 px-6 py-2 rounded-full cta-button hidden">
+                        Volver a Categorías
+                    </button>
+                `;
+            }
+
+
+            content.innerHTML = `
+                <div id="match-grid" class="grid grid-cols-2 gap-4 p-4 max-w-xl mx-auto">
+                    <!-- Spanish Column -->
+                    <div id="es-col" class="space-y-3">
+                        ${spanishWords.map(word => `<button id="btn-es-${word.id}" onclick="selectMatch('${word.lang}', ${word.id}, this)"
+                            class="match-button w-full px-4 py-3 rounded-lg text-lg font-medium text-left">
+                            ${word.text}
+                        </button>`).join('')}
+                    </div>
+                    <!-- English Column -->
+                    <div id="en-col" class="space-y-3">
+                        ${englishWords.map(word => `<button id="btn-en-${word.id}" onclick="selectMatch('${word.lang}', ${word.id}, this)"
+                            class="match-button w-full px-4 py-3 rounded-lg text-lg font-medium text-right">
+                            ${word.text}
+                        </button>`).join('')}
+                    </div>
+                </div>
+                <div id="match-feedback" class="text-center mt-6 text-xl font-bold"></div>
+                <div id="completion-message" class="text-center mt-6 text-2xl font-bold hidden" style="color:var(--color-success);">
+                    ¡Felicidades! You matched all the words!
+                </div>
+                <div class="text-center">
+                    ${navigationButtons}
+                </div>
+            `;
+        }
+
+        function selectMatch(lang, id, element) {
+            const matchFeedback = document.getElementById('match-feedback');
+
+            if (element.classList.contains('correct')) return; // Ya emparejado
+
+            // 1. Deseleccionar el botón previamente seleccionado (si existe y no es el mismo)
+            if (appState.selectedMatchButton) {
+                if (appState.selectedMatchButton === element) {
+                    // Deselección del mismo botón
+                    element.classList.remove('selected');
+                    appState.selectedMatchButton = null;
+                    matchFeedback.textContent = '';
+                    return;
+                }
+                
+                // Si el botón seleccionado es del mismo idioma, deseleccionarlo primero
+                if (appState.selectedMatchButton.id.startsWith(`btn-${lang}`)) {
+                    appState.selectedMatchButton.classList.remove('selected');
+                    appState.selectedMatchButton = element;
+                    element.classList.add('selected');
+                    matchFeedback.textContent = 'One selected... now choose its pair.';
+                    return;
+                }
+            }
+            
+            // 2. Si no hay botón seleccionado o si es un nuevo par potencial
+            if (!appState.selectedMatchButton) {
+                // Primer botón seleccionado
+                appState.selectedMatchButton = element;
+                element.classList.add('selected');
+                matchFeedback.textContent = 'One selected... now choose its pair.';
+            } else {
+                // Segundo botón seleccionado: ¡Es hora de verificar!
+                const prevElement = appState.selectedMatchButton;
+                const prevLang = prevElement.id.split('-')[1];
+                const prevId = parseInt(prevElement.id.split('-')[2]);
+
+                // Verificar si son un par válido (diferente idioma e IDs coincidentes)
+                if (prevLang !== lang) {
+                    // Nota: el ID es el índice del elemento en el sub-array filtrado
+                    if (prevId === id) { 
+                        // COINCIDENCIA CORRECTA
+                        element.classList.remove('selected');
+                        prevElement.classList.remove('selected');
+                        
+                        element.classList.add('correct');
+                        prevElement.classList.add('correct');
+                        
+                        matchFeedback.textContent = '¡Correcto! Matched.';
+                        appState.selectedMatchButton = null;
+                        appState.matchedPairs++;
+
+                        if (appState.matchedPairs === appState.activityData.length) {
+                            document.getElementById('completion-message').classList.remove('hidden');
+
+                            // Muestra el botón de navegación final o para la Parte 2
+                            const nextBtn = document.getElementById('next-part-btn');
+                            const finishBtn = document.getElementById('completion-btn');
+
+                            // Muestra el botón de la siguiente parte o el de finalización
+                            if (nextBtn) {
+                                nextBtn.classList.remove('hidden');
+                            } else if (finishBtn) {
+                                finishBtn.classList.remove('hidden');
+                            }
+                        }
+
+                    } else {
+                        // COINCIDENCIA INCORRECTA
+                        element.classList.remove('selected');
+                        prevElement.classList.remove('selected');
+                        
+                        element.classList.add('incorrect');
+                        prevElement.classList.add('incorrect');
+                        
+                        matchFeedback.textContent = 'Incorrect. Try again.';
+                        appState.selectedMatchButton = null;
+
+                        // Revertir el color después de un breve flash
+                        setTimeout(() => {
+                            element.classList.remove('incorrect');
+                            prevElement.classList.remove('incorrect');
+                            matchFeedback.textContent = '';
+                        }, 700);
+                    }
+                } else {
+                    // Mismo idioma (debería haberse manejado en el paso 1)
+                    prevElement.classList.remove('selected');
+                    element.classList.add('selected');
+                    appState.selectedMatchButton = element;
+                    matchFeedback.textContent = 'One selected... now choose its pair.';
+                }
+            }
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = showHome;
+    </script>
+
+</body>
+</html>
