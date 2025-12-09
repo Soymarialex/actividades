@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empareja Pronombres y Verbos Imperativos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            /* Cambiado: Ya no centramos solo el contenedor del juego, sino toda la interfaz */
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Nuevo: Estilos del Contenedor Principal (para la barra lateral y el juego) */
+        #main-wrapper {
+            display: flex;
+            width: 100%;
+            justify-content: center; /* Centra el contenedor del juego horizontalmente */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #game-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            transition: margin-left 0.3s ease; /* Transición para el desplazamiento al abrir/cerrar sidebar */
+        }
+        
+        /* ------------------ BARRA LATERAL (SIDEBAR) ------------------ */
+
+        #sidebar {
+            width: 0; /* Inicialmente oculta */
+            background-color: #2c3e50; /* Dark blue-gray */
+            color: white;
+            position: fixed; /* Fija la barra lateral */
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding-top: 60px; /* Espacio para el botón de cerrar */
+            overflow-x: hidden;
+            transition: 0.3s;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #sidebar.open {
+            width: 250px; /* Ancho cuando está abierta */
+        }
+
+        .sidebar-button {
+            padding: 15px 15px;
+            text-decoration: none;
+            font-size: 1rem;
+            color: #ecf0f1;
+            display: block;
+            border: none;
+            background: none;
+            text-align: left;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: capitalize;
+        }
+
+        .sidebar-button:hover {
+            background-color: #34495e; /* Slightly darker */
+            color: #ffffff;
+        }
+
+        #close-sidebar-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        /* ------------------ BOTÓN PARA ABRIR BARRA LATERAL ------------------ */
+
+        #open-sidebar-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            background-color: #3f51b5; /* Indigo */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1001; /* Asegúrate de que esté sobre el sidebar cuando esté cerrado */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        #open-sidebar-btn:hover {
+            background-color: #303f9f; /* Darker indigo */
+        }
+
+        /* ------------------ ESTILOS DE JUEGO EXISTENTES ------------------ */
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50; 
+            margin-bottom: 20px;
+        }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .card {
+            background-color: #e0f2f7; 
+            color: #00796b; 
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 2px solid transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60px;
+            text-transform: capitalize; 
+        }
+        .card:hover:not(.matched):not(.selected) {
+            background-color: #b2ebf2; 
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        .card.selected {
+            border-color: #3f51b5; 
+            background-color: #c5cae9; 
+            color: #1a237e; 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        .card.matched {
+            background-color: #a5d6a7; 
+            color: #2e7d32; 
+            cursor: default;
+            opacity: 0.7;
+            border-color: #4caf50; 
+        }
+        .card.hidden {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            height: 0; 
+            padding: 0;
+            margin: 0;
+            transition: all 0.3s ease-out;
+        }
+        .card.incorrect {
+            animation: shake 0.3s;
+            border-color: #ef5350; 
+            background-color: #ffcdd2; 
+            color: #d32f2f; 
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        #sentence-display {
+            min-height: 70px;
+            background-color: #bbdefb; 
+            color: #1565c0; 
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 1.4rem;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #next-button {
+            background-color: #4caf50; 
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            display: none; 
+            margin-top: 20px;
+        }
+        #next-button:hover {
+            background-color: #66bb6a; 
+            transform: translateY(-2px);
+        }
+        #completion-message {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2e7d32;
+            display: none;
+            margin-top: 30px;
+        }
+        #current-verb-display {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a237e; 
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background-color: #e8eaf6;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <button id="open-sidebar-btn" onclick="toggleSidebar()">
+        ☰ Verbos
+    </button>
+
+    <div id="sidebar">
+        <a href="javascript:void(0)" id="close-sidebar-btn" onclick="toggleSidebar()">&times;</a>
+        <div id="verb-sidebar-links"></div>
+    </div>
+
+    <div id="main-wrapper">
+        <div id="game-container">
+            <div id="current-verb-display"></div>
+            <div id="sentence-display">¡Empieza a emparejar!</div>
+
+            <div>
+                <h3 class="section-title">Pronombres</h3>
+                <div id="pronoun-grid" class="card-grid">
+                    </div>
+            </div>
+
+            <div>
+                <h3 class="section-title">Verbos Imperativos</h3>
+                <div id="verb-grid" class="card-grid">
+                    </div>
+            </div>
+
+            <button id="next-button" class="mt-8">Siguiente Verbo</button>
+            <div id="completion-message">¡Felicidades! Has completado todas las actividades.</div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure for verbs, their imperative forms, and example sentences
+        const verbsData = [
+            {
+                infinitive: "lavar",
+                forms: {
+                    tú: { imperative: "lava", sentence: "lava los platos." },
+                    usted: { imperative: "lave", sentence: "lave la ropa, por favor." },
+                    nosotros: { imperative: "lavemos", sentence: "lavemos el coche." },
+                    vosotros: { imperative: "lavad", sentence: "lavad las manos." },
+                    ustedes: { imperative: "laven", sentence: "laven las verduras." }
+                }
+            },
+            {
+                infinitive: "caminar",
+                forms: {
+                    tú: { imperative: "camina", sentence: "camina más rápido." },
+                    usted: { imperative: "camine", sentence: "camine con cuidado." },
+                    nosotros: { imperative: "caminemos", sentence: "caminemos juntos." },
+                    vosotros: { imperative: "caminad", sentence: "caminad por la acera." },
+                    ustedes: { imperative: "caminen", sentence: "caminen hacia el parque." }
+                }
+            },
+            {
+                infinitive: "llamar",
+                forms: {
+                    tú: { imperative: "llama", sentence: "llama a tu mamá." },
+                    usted: { imperative: "llame", sentence: "llame a la puerta." },
+                    nosotros: { imperative: "llamemos", sentence: "llamemos un taxi." },
+                    vosotros: { imperative: "llamad", sentence: "llamad a vuestros amigos." },
+                    ustedes: { imperative: "llamen", sentence: "llamen al servicio de atención." }
+                }
+            },
+            {
+                infinitive: "viajar",
+                forms: {
+                    tú: { imperative: "viaja", sentence: "viaja ligero de equipaje." },
+                    usted: { imperative: "viaje", sentence: "viaje con seguridad." },
+                    nosotros: { imperative: "viajemos", sentence: "viajemos por el mundo." },
+                    vosotros: { imperative: "viajad", sentence: "viajad en tren." },
+                    ustedes: { imperative: "viajen", sentence: "viajen a su destino." }
+                }
+            },
+            {
+                infinitive: "cantar",
+                forms: {
+                    tú: { imperative: "canta", sentence: "canta tu canción favorita." },
+                    usted: { imperative: "cante", sentence: "cante con alegría." },
+                    nosotros: { imperative: "cantemos", sentence: "cantemos en el coro." },
+                    vosotros: { imperative: "cantad", sentence: "cantad bien fuerte." },
+                    ustedes: { imperative: "canten", sentence: "canten en la fiesta." }
+                }
+            },
+            {
+                infinitive: "leer",
+                forms: {
+                    tú: { imperative: "lee", sentence: "lee el libro con atención." },
+                    usted: { imperative: "lea", sentence: "lea las instrucciones." },
+                    nosotros: { imperative: "leamos", sentence: "leamos este artículo." },
+                    vosotros: { imperative: "leed", sentence: "leed el periódico." },
+                    ustedes: { imperative: "lean", sentence: "lean el contrato." }
+                }
+            },
+            {
+                infinitive: "romper",
+                forms: {
+                    tú: { imperative: "rompe", sentence: "rompe el récord." },
+                    usted: { imperative: "rompa", sentence: "rompa el hielo." },
+                    nosotros: { imperative: "rompamos", sentence: "rompamos las barreras." },
+                    vosotros: { imperative: "romped", sentence: "romped el silencio." },
+                    ustedes: { imperative: "rompan", sentence: "rompan las reglas." }
+                }
+            },
+            {
+                infinitive: "vender",
+                forms: {
+                    tú: { imperative: "vende", sentence: "vende tus viejos juguetes." },
+                    usted: { imperative: "venda", sentence: "venda los productos." },
+                    nosotros: { imperative: "vendamos", sentence: "vendamos la casa." },
+                    vosotros: { imperative: "vended", sentence: "vended esos coches." },
+                    ustedes: { imperative: "vendan", sentence: "vendan las entradas." }
+                }
+            },
+            {
+                infinitive: "barrer",
+                forms: {
+                    tú: { imperative: "barre", sentence: "barre el suelo." },
+                    usted: { imperative: "barra", sentence: "barra el pasillo." },
+                    nosotros: { imperative: "barramos", sentence: "barramos la entrada." },
+                    vosotros: { imperative: "barred", sentence: "barred vuestras habitaciones." },
+                    ustedes: { imperative: "barran", sentence: "barran las escaleras." }
+                }
+            },
+            {
+                infinitive: "correr",
+                forms: {
+                    tú: { imperative: "corre", sentence: "corre muy rápido." },
+                    usted: { imperative: "corra", sentence: "corra por el parque." },
+                    nosotros: { imperative: "corramos", sentence: "corramos el maratón." },
+                    vosotros: { imperative: "corred", sentence: "corred en el gimnasio." },
+                    ustedes: { imperative: "corran", sentence: "corran la voz." }
+                }
+            },
+            {
+                infinitive: "vivir",
+                forms: {
+                    tú: { imperative: "vive", sentence: "vive la vida al máximo." },
+                    usted: { imperative: "viva", sentence: "viva feliz." },
+                    nosotros: { imperative: "vivamos", sentence: "vivamos en paz." },
+                    vosotros: { imperative: "vivid", sentence: "vivid vuestros sueños." },
+                    ustedes: { imperative: "vivan", sentence: "vivan sus propias aventuras." }
+                }
+            },
+            {
+                infinitive: "escribir",
+                forms: {
+                    tú: { imperative: "escribe", sentence: "escribe una carta." },
+                    usted: { imperative: "escriba", sentence: "escriba su nombre." },
+                    nosotros: { imperative: "escribamos", sentence: "escribamos la historia." },
+                    vosotros: { imperative: "escribid", sentence: "escribid vuestras ideas." },
+                    ustedes: { imperative: "escriban", sentence: "escriban sus ensayos." }
+                }
+            },
+            {
+                infinitive: "abrir",
+                forms: {
+                    tú: { imperative: "abre", sentence: "abre la puerta." },
+                    usted: { imperative: "abra", sentence: "abra el paquete." },
+                    nosotros: { imperative: "abramos", sentence: "abramos el debate." },
+                    vosotros: { imperative: "abrid", sentence: "abrid vuestros corazones." },
+                    ustedes: { imperative: "abran", sentence: "abran las ventanas." }
+                }
+            },
+            {
+                infinitive: "subir",
+                forms: {
+                    tú: { imperative: "sube", sentence: "sube las escaleras." },
+                    usted: { imperative: "suba", sentence: "suba al autobús." },
+                    nosotros: { imperative: "subamos", sentence: "subamos la colina." },
+                    vosotros: { imperative: "subid", sentence: "subid al coche." },
+                    ustedes: { imperative: "suban", sentence: "suban el volumen." }
+                }
+            },
+            {
+                infinitive: "decidir",
+                forms: {
+                    tú: { imperative: "decide", sentence: "decide tu futuro." },
+                    usted: { imperative: "decida", sentence: "decida usted mismo." },
+                    nosotros: { imperative: "decidamos", sentence: "decidamos juntos." },
+                    vosotros: { imperative: "decidid", sentence: "decidid por vosotros mismos." },
+                    ustedes: { imperative: "decidan", sentence: "decidan rápidamente." }
+                }
+            }
+        ];
+
+        // DOM elements
+        const pronounGrid = document.getElementById('pronoun-grid');
+        const verbGrid = document.getElementById('verb-grid');
+        const sentenceDisplay = document.getElementById('sentence-display');
+        const nextButton = document.getElementById('next-button');
+        const completionMessage = document.getElementById('completion-message');
+        const currentVerbDisplay = document.getElementById('current-verb-display');
+        const sidebar = document.getElementById('sidebar');
+        const verbSidebarLinks = document.getElementById('verb-sidebar-links');
+
+        // Game state variables
+        let currentVerbIndex = 0;
+        let selectedPronoun = null;
+        let selectedVerbForm = null;
+        let matchedPairsCount = 0;
+        const totalPairsPerVerb = 5; // tú, usted, nosotros, vosotros, ustedes
+
+        // Pronouns to display
+        const pronouns = ["tú", "usted", "nosotros", "vosotros", "ustedes"];
+
+        /**
+         * Shuffles an array in place using the Fisher-Yates (Knuth) algorithm.
+         * @param {Array} array The array to shuffle.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        /**
+         * Renders the pronoun cards in the grid.
+         */
+        function renderPronouns() {
+            pronounGrid.innerHTML = ''; // Clear previous pronouns
+            pronouns.forEach(pronoun => {
+                const card = document.createElement('div');
+                card.classList.add('card', 'rounded-xl', 'cursor-pointer');
+                card.textContent = pronoun;
+                card.dataset.type = 'pronoun';
+                card.dataset.value = pronoun;
+                card.addEventListener('click', handleCardClick);
+                pronounGrid.appendChild(card);
+            });
+        }
+
+        /**
+         * Renders the verb form cards for the current verb in the grid.
+         */
+        function renderVerbForms() {
+            verbGrid.innerHTML = ''; // Clear previous verb forms
+            if (currentVerbIndex >= verbsData.length) return;
+
+            const currentVerb = verbsData[currentVerbIndex];
+            const verbForms = Object.keys(currentVerb.forms).map(key => ({
+                pronoun: key,
+                imperative: currentVerb.forms[key].imperative,
+                sentence: currentVerb.forms[key].sentence
+            }));
+
+            shuffleArray(verbForms); // Shuffle verb forms for variety
+
+            verbForms.forEach(form => {
+                const card = document.createElement('div');
+                card.classList.add('card', 'rounded-xl', 'cursor-pointer');
+                card.textContent = form.imperative;
+                card.dataset.type = 'verb';
+                card.dataset.value = form.imperative;
+                card.dataset.pronounMatch = form.pronoun; // Store the pronoun it matches with
+                card.dataset.sentence = form.sentence; // Store the sentence
+                card.addEventListener('click', handleCardClick);
+                verbGrid.appendChild(card);
+            });
+        }
+
+        /**
+         * Handles the click event on both pronoun and verb cards.
+         * @param {Event} event The click event.
+         */
+        function handleCardClick(event) {
+            const clickedCard = event.target;
+
+            // Do nothing if card is already matched or incorrect (during animation)
+            if (clickedCard.classList.contains('matched') || clickedCard.classList.contains('incorrect')) {
+                return;
+            }
+
+            if (clickedCard.dataset.type === 'pronoun') {
+                // Deselect previous pronoun if any
+                if (selectedPronoun) {
+                    selectedPronoun.classList.remove('selected');
+                }
+                selectedPronoun = clickedCard;
+                selectedPronoun.classList.add('selected');
+            } else if (clickedCard.dataset.type === 'verb') {
+                // Deselect previous verb if any
+                if (selectedVerbForm) {
+                    selectedVerbForm.classList.remove('selected');
+                }
+                selectedVerbForm = clickedCard;
+                selectedVerbForm.classList.add('selected');
+            }
+
+            // Check for a match if both are selected
+            if (selectedPronoun && selectedVerbForm) {
+                checkMatch();
+            }
+        }
+
+        /**
+         * Checks if the selected pronoun and verb form constitute a correct match.
+         */
+        function checkMatch() {
+            const currentVerbData = verbsData[currentVerbIndex];
+            const correctImperative = currentVerbData.forms[selectedPronoun.dataset.value].imperative;
+
+            if (selectedVerbForm.dataset.value === correctImperative) {
+                // Correct match!
+                sentenceDisplay.textContent = `"${selectedVerbForm.dataset.sentence}"`;
+                sentenceDisplay.style.backgroundColor = '#bbdefb'; // Reset background color
+                sentenceDisplay.style.color = '#1565c0'; // Reset text color
+
+                // Mark both cards as matched and disable them
+                selectedPronoun.classList.remove('selected');
+                selectedVerbForm.classList.remove('selected');
+                selectedPronoun.classList.add('matched');
+                selectedVerbForm.classList.add('matched');
+
+                // Optionally hide the matched cards
+                setTimeout(() => {
+                    selectedPronoun.classList.add('hidden');
+                    selectedVerbForm.classList.add('hidden');
+                }, 300); // Give a brief moment to see the matched state
+
+                matchedPairsCount++;
+                selectedPronoun = null;
+                selectedVerbForm = null;
+
+                if (matchedPairsCount === totalPairsPerVerb) {
+                    setTimeout(() => {
+                        nextButton.style.display = 'block';
+                    }, 500); // Show next button after cards are hidden
+                }
+            } else {
+                // Incorrect match
+                sentenceDisplay.textContent = "¡Incorrecto! Inténtalo de nuevo.";
+                sentenceDisplay.style.backgroundColor = '#ffcdd2'; // Light red for error
+                sentenceDisplay.style.color = '#d32f2f'; // Dark red for error
+
+                // Add incorrect class for animation and then remove
+                selectedPronoun.classList.add('incorrect');
+                selectedVerbForm.classList.add('incorrect');
+
+                setTimeout(() => {
+                    selectedPronoun.classList.remove('selected', 'incorrect');
+                    selectedVerbForm.classList.remove('selected', 'incorrect');
+                    selectedPronoun = null;
+                    selectedVerbForm = null;
+                }, 800); // Allow shake animation to complete
+            }
+        }
+        
+        /**
+         * Loads a specific verb by its index, skipping intermediate levels.
+         * @param {number} index The index of the verb in verbsData.
+         */
+        window.loadVerb = function(index) {
+            if (index >= 0 && index < verbsData.length) {
+                currentVerbIndex = index;
+                initializeGame();
+                toggleSidebar(); // Close sidebar after selecting a verb
+            }
+        }
+
+        /**
+         * Populates the sidebar with buttons for all verbs.
+         */
+        function populateSidebar() {
+            verbSidebarLinks.innerHTML = '';
+            verbsData.forEach((verb, index) => {
+                const button = document.createElement('button');
+                button.classList.add('sidebar-button');
+                button.textContent = verb.infinitive;
+                button.setAttribute('onclick', `loadVerb(${index})`);
+                verbSidebarLinks.appendChild(button);
+            });
+        }
+        
+        /**
+         * Toggles the visibility of the sidebar.
+         */
+        window.toggleSidebar = function() {
+            sidebar.classList.toggle('open');
+        }
+
+        /**
+         * Initializes the game with the current verb.
+         */
+        function initializeGame() {
+            if (currentVerbIndex < verbsData.length) {
+                // Ensure all elements are visible for a new round
+                document.getElementById('current-verb-display').style.display = 'block';
+                document.getElementById('sentence-display').style.display = 'flex';
+                document.getElementById('pronoun-grid').style.display = 'grid';
+                document.getElementById('verb-grid').style.display = 'grid';
+
+                const currentVerb = verbsData[currentVerbIndex];
+                currentVerbDisplay.textContent = `Verbo: ${currentVerb.infinitive}`;
+                sentenceDisplay.textContent = "¡Empieza a emparejar!";
+                sentenceDisplay.style.backgroundColor = '#bbdefb'; 
+                sentenceDisplay.style.color = '#1565c0'; 
+                nextButton.style.display = 'none';
+                completionMessage.style.display = 'none';
+                matchedPairsCount = 0;
+                selectedPronoun = null;
+                selectedVerbForm = null;
+
+                renderPronouns(); // Always render pronouns, they don't change
+                renderVerbForms();
+            } else {
+                // Game completed
+                currentVerbDisplay.style.display = 'none';
+                sentenceDisplay.style.display = 'none';
+                pronounGrid.style.display = 'none';
+                verbGrid.style.display = 'none';
+                nextButton.style.display = 'none';
+                completionMessage.style.display = 'block';
+            }
+        }
+
+        // Event listener for the "Next" button
+        nextButton.addEventListener('click', () => {
+            currentVerbIndex++;
+            initializeGame();
+        });
+
+        // Initialize the game and the sidebar on window load
+        window.onload = () => {
+            populateSidebar();
+            initializeGame();
+        };
+    </script>
+</body>
+</html>
