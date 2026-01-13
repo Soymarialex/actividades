@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game - Test your memory</title>
+    <!-- Control de caché y rutas relativas -->
+    <link rel="stylesheet" href="style.css?v=1.0">
+    <style>
+        :root {
+            --flamingo-pink: #FF79AC;
+            --flamingo-light: #ffd1e3;
+            --eerie-black: #121118;
+            --correct-green: #90ee90;
+            --wrong-red: #ffcccb;
+            --bg-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Platform Medium', sans-serif;
+            background-color: var(--bg-white);
+            color: var(--eerie-black);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        h1 {
+            color: var(--flamingo-pink);
+            font-weight: bold;
+            margin: 0;
+            font-size: 2.5em;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            margin: 5px 0 15px 0;
+            font-weight: normal;
+            font-size: 1.2em;
+        }
+
+        .level-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background-color: var(--flamingo-light);
+            border: none;
+            border-bottom: 3px solid var(--flamingo-pink);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .nav-btn.active {
+            background-color: var(--flamingo-pink);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .word-btn {
+            background-color: var(--flamingo-light);
+            border: none;
+            border-bottom: 3px solid var(--flamingo-pink);
+            padding: 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95em;
+            border-radius: 4px;
+            text-align: center;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+
+        .word-btn.selected {
+            background-color: var(--flamingo-pink);
+            color: white;
+        }
+
+        .word-btn.correct {
+            background-color: var(--correct-green) !important;
+            border-bottom-color: #76c776;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .word-btn.wrong {
+            background-color: var(--wrong-red) !important;
+            border-bottom-color: #e5a1a1;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .game-container {
+                gap: 10px;
+            }
+            .word-btn {
+                font-size: 0.85em;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Matching game</h1>
+        <h2>test your memory</h2>
+    </div>
+
+    <div class="level-selector">
+        <button class="nav-btn active" onclick="loadLevel(0)">Nivel 1</button>
+        <button class="nav-btn" onclick="loadLevel(1)">Nivel 2</button>
+        <button class="nav-btn" onclick="loadLevel(2)">Nivel 3</button>
+        <button class="nav-btn" onclick="loadLevel(3)">Nivel 4</button>
+    </div>
+
+    <div class="game-container">
+        <div class="column" id="col-es"></div>
+        <div class="column" id="col-en"></div>
+    </div>
+
+    <script>
+        const levels = [
+            // Nivel 1 (7)
+            [
+                { es: "La clave", en: "key" },
+                { es: "El freno", en: "brake" },
+                { es: "La Fábula", en: "fable" },
+                { es: "La natación", en: "swimming" },
+                { es: "La carrera", en: "running" },
+                { es: "La ardilla", en: "squirrel" },
+                { es: "La copa del árbol", en: "the treetop" }
+            ],
+            // Nivel 2 (7)
+            [
+                { es: "El calambre", en: "cramp" },
+                { es: "Lastimarse", en: "to injured oneself" },
+                { es: "Siquiera", en: "even" },
+                { es: "Inaugurar", en: "to start" },
+                { es: "Cavar", en: "to dig" },
+                { es: "El colaso nervioso", en: "nervous breakdown" },
+                { es: "Sino", en: "but" }
+            ],
+            // Nivel 3 (7)
+            [
+                { es: "Ni siquiera", en: "even" },
+                { es: "A menos que", en: "unless" },
+                { es: "De modo que", en: "so" },
+                { es: "Salvo", en: "except" },
+                { es: "Suficiente", en: "passing grade" },
+                { es: "Insuficiente", en: "failing" },
+                { es: "Severamente", en: "severely" }
+            ],
+            // Nivel 4 (8)
+            [
+                { es: "Castigado", en: "punished" },
+                { es: "Enterrar", en: "to bury" },
+                { es: "Padecer", en: "to suffer" },
+                { es: "Disentir", en: "to disagree" },
+                { es: "Liberar", en: "to release" },
+                { es: "Trepar", en: "to climb" },
+                { es: "Facilitar", en: "to make it easier" },
+                { es: "Durar", en: "to last" }
+            ]
+        ];
+
+        let selectedEs = null;
+        let selectedEn = null;
+        let currentLevelIndex = 0;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function loadLevel(index) {
+            currentLevelIndex = index;
+            selectedEs = null;
+            selectedEn = null;
+
+            // Actualizar botones de navegación
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach((btn, i) => {
+                if(i === index) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+
+            const colEs = document.getElementById('col-es');
+            const colEn = document.getElementById('col-en');
+            colEs.innerHTML = '';
+            colEn.innerHTML = '';
+
+            const words = levels[index];
+            const shuffledEs = shuffle([...words]);
+            const shuffledEn = shuffle([...words]);
+
+            shuffledEs.forEach(pair => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.textContent = pair.es;
+                btn.onclick = () => selectWord(btn, 'es', pair.en);
+                colEs.appendChild(btn);
+            });
+
+            shuffledEn.forEach(pair => {
+                const btn = document.createElement('button');
+                btn.className = 'word-btn';
+                btn.textContent = pair.en;
+                btn.onclick = () => selectWord(btn, 'en', pair.en);
+                colEn.appendChild(btn);
+            });
+        }
+
+        function selectWord(btn, lang, matchId) {
+            if (btn.classList.contains('correct')) return;
+
+            if (lang === 'es') {
+                if (selectedEs) selectedEs.element.classList.remove('selected');
+                selectedEs = { element: btn, matchId: matchId };
+                btn.classList.add('selected');
+            } else {
+                if (selectedEn) selectedEn.element.classList.remove('selected');
+                selectedEn = { element: btn, matchId: matchId };
+                btn.classList.add('selected');
+            }
+
+            if (selectedEs && selectedEn) {
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const esObj = selectedEs;
+            const enObj = selectedEn;
+
+            if (esObj.matchId === enObj.matchId) {
+                // Acierto
+                esObj.element.classList.remove('selected');
+                enObj.element.classList.remove('selected');
+                esObj.element.classList.add('correct');
+                enObj.element.classList.add('correct');
+                selectedEs = null;
+                selectedEn = null;
+            } else {
+                // Error
+                esObj.element.classList.add('wrong');
+                enObj.element.classList.add('wrong');
+                
+                const tempEs = selectedEs;
+                const tempEn = selectedEn;
+                selectedEs = null;
+                selectedEn = null;
+
+                setTimeout(() => {
+                    tempEs.element.classList.remove('wrong', 'selected');
+                    tempEn.element.classList.remove('wrong', 'selected');
+                }, 1000);
+            }
+        }
+
+        // Iniciar con nivel 1
+        window.onload = () => loadLevel(0);
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorando las diferencias / Valuing the Differences</title>
+    <style>
+        :root {
+            --flamingo-pink: #FF79AC;
+            --eerie-black: #121118;
+            --light-gray: #e0e0e0;
+            --bg-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Platform Medium', sans-serif;
+            background-color: var(--bg-white);
+            color: var(--eerie-black);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--eerie-black);
+            text-align: left;
+        }
+
+        h2 {
+            color: var(--eerie-black);
+            border-bottom: 2px solid var(--flamingo-pink);
+            padding-bottom: 5px;
+            margin-top: 40px;
+        }
+
+        /* Vocabulario */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 40px;
+            margin-bottom: 20px;
+        }
+
+        .vocab-item {
+            padding: 5px 0;
+        }
+
+        .vocab-item b {
+            font-weight: bold;
+            color: var(--eerie-black);
+        }
+
+        .divider {
+            grid-column: 1 / span 2;
+            height: 1px;
+            background-color: var(--light-gray);
+            margin: 10px 0;
+        }
+
+        /* Secciones de texto */
+        .paragraph-container {
+            margin-bottom: 30px;
+        }
+
+        .text-es {
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        .text-en {
+            text-align: justify;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--flamingo-pink);
+            display: none;
+        }
+
+        .translate-btn {
+            background-color: var(--flamingo-pink);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: opacity 0.3s;
+        }
+
+        .translate-btn:hover {
+            opacity: 0.8;
+        }
+
+        .main-image {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        /* Resaltado de negritas en el texto */
+        strong, b {
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Valorando las diferencias / Valuing the Differences</h1>
+    
+    <h2>I. Vocabulario nuevo / New Vocabulary</h2>
+    
+    <div class="vocab-grid">
+        <div class="vocab-item"><b>La clave</b> - key</div>
+        <div class="vocab-item"><b>El freno</b> - brake</div>
+        <div class="vocab-item"><b>La Fábula</b> - fable</div>
+        <div class="vocab-item"><b>La natación</b> - swimming</div>
+        <div class="vocab-item"><b>La carrera</b> - running</div>
+        <div class="vocab-item"><b>La ardilla</b> - squirrel</div>
+        <div class="vocab-item"><b>La copa del árbol</b> - the treetop</div>
+        <div class="vocab-item"><b>El calambre</b> - cramp</div>
+        <div class="vocab-item"><b>La anguila</b> - eel</div>
+        <div class="vocab-item"><b>El tejón</b> - badger</div>
+        <div class="vocab-item"><b>La marmota</b> - marmot</div>
+        <div class="vocab-item"><b>El topo</b> - mole</div>
+        <div class="vocab-item"><b>El colapso nervioso</b> - nervous breakdown</div>
+        <div></div>
+        <div class="divider"></div>
+        <div class="vocab-item"><b>Sino</b> - but</div>
+        <div class="vocab-item"><b>Siquiera</b> - even</div>
+        <div class="vocab-item"><b>A menos que</b> - unless</div>
+        <div class="vocab-item"><b>De modo que</b> - so</div>
+        <div class="vocab-item"><b>Salvo</b> - except</div>
+        <div class="vocab-item"><b>Suficiente</b> - passing grade</div>
+        <div class="vocab-item"><b>Insuficiente</b> - failing</div>
+        <div class="vocab-item"><b>Severamente</b> - severely</div>
+        <div class="vocab-item"><b>Castigado</b> - punished</div>
+    </div>
+
+    <h2>¿Qué ves en esta imagen?</h2>
+    <img src="https://imgur.com/eQihkX1.png" alt="[Imagen de ilusión óptica]" class="main-image">
+
+    <h2>Valorando las diferencias / Valuing the Differences</h2>
+
+    <div class="info-section">
+        <!-- Bloque 1 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                La valoración de las diferencias (mentales, emocionales, psicológicas) es la esencia de la sinergia. Y <b>la clave</b> para valorar esas diferencias consiste en comprender que todas las personas ven el mundo no como es, <b>sino</b> como son ellas mismas.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                Valuing differences (mental, emotional, psychological) is the essence of synergy. And <b>the key</b> to valuing those differences lies in understanding that all people see the world not as it is, <b>but</b> as they are.
+            </div>
+        </div>
+
+        <!-- Bloque 2 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                Si yo viera el mundo como es, ¿de qué me serviría valorar las diferencias? ¿Por qué habría de molestarme <b>siquiera</b> en prestar atención a alguien que está «fuera del camino»? Mi paradigma es que soy objetivo; veo el mundo tal como es. Todos los otros se dejan <b>enterrar</b> por las minucias, pero yo veo todo el cuadro. Por ello me llaman «supervisor»: tengo una «supervisión».
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                If I saw the world as it is, what use would it be to value differences? Why should I <b>even</b> bother to pay attention to someone who is "off track"? My paradigma is that I am objective; I see the world just as it is. Everyone else gets <b>buried</b> in the minutiae, but I see the whole picture. That is why they call me a "supervisor": I have "super-vision."
+            </div>
+        </div>
+
+        <!-- Bloque 3 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                Con ese paradigma nunca seré efectivamente interdependiente, ni <b>siquiera</b> efectivamente independiente. Me limitarán los paradigmas de mi propio condicionamiento.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                With that paradigm, I will never be effectively interdependent, or <b>even</b> effectively independent. I will be limited by the paradigms of my own conditioning.
+            </div>
+        </div>
+
+        <!-- Bloque 4 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                La persona verdaderamente efectiva tiene la humildad y el respeto necesarios para reconocer sus propias limitaciones preceptúales y apreciar los ricos recursos que pone a su disposición la interacción con los corazones y las mentes de otros seres humanos. Esa persona valora las diferencias porque esas diferencias acrecientan su conocimiento, su comprensión de la realidad. Librados a nuestras propias experiencias, constantemente <b>padecemos</b> una insuficiencia de datos.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                The truly effective person has the humility and respect necessary to recognize their own perceptual limitations and appreciate the rich resources made available through interaction with the hearts and minds of other human beings. That person values differences because those differences increase their knowledge and understanding of reality. Left to our own experiences, we constantly <b>suffer</b> from an insufficiency of data.
+            </div>
+        </div>
+
+        <!-- Bloque 5 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                ¿Es lógico que dos personas <b>disientan</b> y que ambas tengan razón? No es lógico, es psicológico. Y es muy real. Usted ve a la joven, yo veo a la anciana. Los dos miramos el mismo dibujo, y los dos tenemos razón. Vemos las mismas líneas negras, los mismos espacios en blanco. Pero los interpretamos de diferente modo, porque hemos sido condicionados para ello. <b>A menos que</b> valoremos las diferencias de nuestras percepciones, a menos que nos valoremos recíprocamente y creamos en la posibilidad de que ambos tengamos razón, de que la vida no sea siempre un «O esto o aquello» dicotómico, de que casi siempre hay terceras alternativas, nunca podremos trascender los límites de ese condicionamiento.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                Is it logical for two people to <b>disagree</b> and for both to be right? It is not logical, it is psychological. And it is very real. You see the young woman; I see the old lady. We are both looking at the same drawing, and we are both right. We see the same black lines, the same white spaces. But we interpret them differently because we have been conditioned to do so. <b>Unless</b> we value the differences in our perceptions, unless we value each other and believe in the possibility that we can both be right, that life is not always a dichotomous "either/or," and that there are almost always third alternatives, we will never be able to transcend the limits of that conditioning.
+            </div>
+        </div>
+
+        <!-- Bloque 6 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                Lo único que yo puedo ver es a la anciana. Pero comprendo que usted vea alguna otra cosa. Y lo valoro. Valoro su percepción. Quiero comprender. <b>De modo que</b> cuando tomo conciencia de la diferencia de nuestras percepciones, digo: «¡Bien! Usted lo ve de otro modo. Ayúdeme a ver lo mismo que usted».
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                The only thing I can see is the old woman. But I understand that you see something else. And I value that. I value your perception. I want to understand. <b>So</b>, when I become aware of the difference in our perceptions, I say: "Great! You see it differently. Help me see what you see."
+            </div>
+        </div>
+
+        <!-- Bloque 7 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                Si dos personas tienen la misma opinión, una de ellas es innecesaria. Para mí no representaría ninguna ventaja comunicarme con alguien que sólo ve a la anciana. No necesito hablar, comunicarme, con alguien que esté de acuerdo conmigo; quiero comunicarme con usted porque ve las cosas de modo diferente. Valoro esa diferencia. Al hacerlo, no sólo aumento mi propia conciencia; también lo estoy afirmando. Le ofrezco aire psicológico. Retiro el pie <b>del freno</b> y <b>libero</b> la energía negativa que usted tal vez haya invertido en la defensa de una posición particular. Creo un ambiente para la sinergia. La importancia de valorar las diferencias queda bien reflejada en la citadísima <b>fábula</b> escrita por el educador doctor R. H. Reeves, titulada «La escuela de los animales».
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                If two people have the same opinion, one of them is unnecessary. For me, there would be no advantage in communicating with someone who only sees the old woman. I don’t need to talk to, or communicate with, someone who agrees with me; I want to communicate with you because you see things differently. I value that difference. By doing so, I not only increase my own awareness; I am also affirming you. I am offering you psychological air. I take my foot off <b>the brake</b> and <b>release</b> the negative energy you might have invested in defending a particular position. I create an environment for synergy. The importance of valuing differences is well reflected in the oft-quoted <b>fable</b> written by educator Dr. R. H. Reeves, titled "The Animal School."
+            </div>
+        </div>
+
+        <!-- Bloque 8 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                Una vez, los animales decidieron que tenían que hacer algo heroico para solucionar los problemas de un «nuevo mundo», <b>de modo que</b> organizaron una escuela. Adoptaron un currículo de actividades consistente en correr, <b>trepar</b>, nadar y volar. Para <b>facilitar</b> la administración todos los animales cursaban todas las materias.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                Once, the animals decided they had to do something heroic to solve the problems of a "new world," <b>so</b> they organized a school. They adopted a curriculum of activities consisting of running, <b>climbing</b>, swimming, and flying. <b>To make</b> administration <b>easier</b>, all the animals took all the subjects.
+            </div>
+        </div>
+
+        <!-- Bloque 9 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                El pato era excelente en <b>natación</b>, mejor incluso que su instructor, y obtuvo muy buenas notas en vuelo, pero pobres en carrera. Con el objeto de mejorar en este aspecto tenía que quedarse a practicar después de clase, e incluso abandonó la natación. Esto <b>duró</b> hasta que <b>se le lastimaron</b> sus patas de palmípedo y se convirtió en un nadador mediano. Pero el promedio era aceptable en la escuela, de modo que nadie se preocupó, <b>salvo</b> el pato.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                The duck was excellent at <b>swimming</b>, even better than his instructor, and got very good grades in flying, but poor ones in running. In order to improve in this area, he had to stay and practice after class, and he even gave up swimming. This <b>lasted</b> until his webbed feet <b>were injured</b> and he became only an average swimmer. But the average was acceptable at the school, so nobody worried, <b>except</b> for the duck.
+            </div>
+        </div>
+
+        <!-- Bloque 10 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                El conejo empezó a la cabeza de la clase en <b>carrera</b>; sin embargo, tuvo un <b>colapso nervioso</b> como consecuencia del tiempo que debía dedicar a la práctica de la natación. La <b>ardilla</b> <b>trepaba</b> muy bien hasta que comenzó a sentirse frustrada en la clase de vuelo, en la que el maestro le hacía partir del suelo en lugar de permitirle bajar desde la <b>copa del árbol</b>. También sufrió <b>muchos calambres</b> como consecuencia del excesivo esfuerzo, y le pusieron apenas un <b>suficiente</b> en trepar y un «<b>insuficiente</b>» en correr.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                The rabbit started at the head of the class in <b>running</b>; however, he had a <b>nervous breakdown</b> as a result of the time he had to spend practicing swimming. The <b>squirrel</b> <b>climbed</b> very well until she started feeling frustrated in flying class, where the teacher made her start from the ground instead of allowing her to climb down from the <b>treetop</b>. She also suffered <b>many cramps</b> due to overexertion, and they gave her barely a <b>passing grade</b> in climbing and a "<b>failing</b>" grade in running.
+            </div>
+        </div>
+
+        <!-- Bloque 11 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                El águila era una alumna problemática y fue <b>severamente castigada</b>. En la clase de trepar llegaba a la cima del árbol antes que todos los otros, pero insistía en hacerlo a su modo. Al final del año, una <b>anguila</b> anormal que nadaba muy bien y también corría, trepaba y volaba un poco, tenía el promedio más alto y le correspondió pronunciar el discurso de despedida.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                The eagle was a problem student and was <b>severely punished</b>. In climbing class, she reached the top of the tree before anyone else, but insisted on doing it her own way. At the end of the year, an abnormal <b>eel</b> that swam very well and also ran, climbed, and flew a little, had the highest average and was chosen to give the valedictorian speech.
+            </div>
+        </div>
+
+        <!-- Bloque 12 -->
+        <div class="paragraph-container">
+            <div class="text-es">
+                Los <b>perros de la pradera</b> quedaron fuera de la escuela y cuestionaron por qué la administración no incluyó en el currículo las materias de <b>cavar</b> y <b>construir madrigueras</b>. Pusieron a <b>sus cachorros</b> a aprender con el <b>tejón</b>, y más tarde se unieron a <b>marmotas</b> y <b>topos</b> para <b>inaugurar</b> una escuela privada de gran éxito.
+            </div>
+            <button class="translate-btn" onclick="toggleTranslation(this)">Mostrar traducción</button>
+            <div class="text-en">
+                The <b>prairie dogs</b> stayed out of the school and questioned why the administration did not include <b>digging</b> and <b>burrowing</b> in the curriculum. They apprenticed <b>their offspring</b> to the <b>badger</b> and later joined <b>marmots</b> and <b>moles</b> to <b>start</b> a very successful private school.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleTranslation(btn) {
+        const translationDiv = btn.nextElementSibling;
+        if (translationDiv.style.display === "block") {
+            translationDiv.style.display = "none";
+            btn.textContent = "Mostrar traducción";
+        } else {
+            translationDiv.style.display = "block";
+            btn.textContent = "Ocultar traducción";
+        }
+    }
+</script>
+
+</body>
+</html>
