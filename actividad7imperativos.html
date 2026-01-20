@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica Interactiva de Imperativos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Se ha diseñado una Single-Page Application (SPA) con una estructura de navegación por pestañas. Hay cuatro pestañas, una para cada actividad del material de origen. Este enfoque de "task-oriented" permite al usuario concentrarse en un conjunto de ejercicios a la vez, evitando la sobrecarga de una página larga. Cada pestaña contiene una lista de frases para completar, campos de entrada de texto y botones de acción ("Verificar", "Mostrar", "Reiniciar"). El flujo es simple: el usuario selecciona una actividad, completa los ejercicios y utiliza los botones para obtener retroalimentación instantánea. Esta estructura se eligió por ser altamente intuitiva y eficaz para aplicaciones de aprendizaje y práctica, ya que modulariza el contenido y guía al usuario de forma clara. -->
+    <!-- Visualization & Content Choices: El contenido del informe (ejercicios de gramática) se presenta como una serie de actividades interactivas. Objetivo: Practicar y autoevaluar el uso de los imperativos en español. Método de Presentación: Se utilizan elementos de formulario HTML (<input>) para que el usuario escriba sus respuestas. Interacción: El usuario recibe retroalimentación visual instantánea (colores de borde y iconos) al presionar el botón "Verificar". También puede optar por ver las respuestas correctas o reiniciar el ejercicio. Justificación: Este método es ideal para el aprendizaje de idiomas, ya que fomenta la participación activa y proporciona una corrección inmediata, lo cual es fundamental para la asimilación de conceptos gramaticales. Biblioteca/Método: Se utiliza Vanilla JavaScript para toda la lógica de interacción (manejo de pestañas, validación de respuestas, etc.) y Tailwind CSS para el diseño. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #FDFBF6;
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-btn {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            border-color: #A0522D; /* Sienna */
+            color: #A0522D;
+        }
+        .correct-answer {
+            border-color: #22c55e; /* green-500 */
+        }
+        .incorrect-answer {
+            border-color: #ef4444; /* red-500 */
+        }
+        .feedback-icon {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Práctica de Imperativos</h1>
+            <p class="text-gray-600 mt-2">Completa las actividades para practicar las formas afirmativas y negativas del modo imperativo.</p>
+        </header>
+
+        <div class="w-full bg-white p-2 rounded-lg shadow-md mb-8">
+            <nav class="flex justify-center space-x-2 md:space-x-4">
+                <button data-tab="actividad1" class="tab-btn active text-sm md:text-base font-medium py-2 px-4 focus:outline-none">Actividad 1</button>
+                <button data-tab="actividad2" class="tab-btn text-sm md:text-base font-medium py-2 px-4 focus:outline-none">Actividad 2</button>
+                <button data-tab="actividad3" class="tab-btn text-sm md:text-base font-medium py-2 px-4 focus:outline-none">Actividad 3</button>
+                <button data-tab="actividad4" class="tab-btn text-sm md:text-base font-medium py-2 px-4 focus:outline-none">Actividad 4</button>
+            </nav>
+        </div>
+
+        <main>
+            <!-- Actividad 1 -->
+            <div id="actividad1" class="tab-content bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-2">Actividad 1: Imperativos Afirmativos</h2>
+                <p class="text-gray-600 mb-4">Completa cada frase con la forma correcta del verbo apropiado del listado.</p>
+                <p class="mb-6 p-3 bg-amber-50 rounded-lg text-amber-800 text-sm"><strong>Verbos:</strong> Hablar, Comer, Estudiar, Cerrar, Ayudar, Llamar, Escribir, No olvidar, Ser cuidadoso.</p>
+                <div class="space-y-4 exercise-container">
+                    <!-- Ejercicios se insertan aquí -->
+                </div>
+                <div class="mt-6 flex flex-wrap gap-2 justify-end">
+                    <button class="action-btn verify bg-sienna-600 hover:bg-sienna-700 text-white font-bold py-2 px-4 rounded" data-activity="1">Verificar</button>
+                    <button class="action-btn show bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-activity="1">Mostrar Respuestas</button>
+                    <button class="action-btn reset bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-activity="1">Reiniciar</button>
+                </div>
+            </div>
+
+            <!-- Actividad 2 -->
+            <div id="actividad2" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-2">Actividad 2: Imperativos Negativos</h2>
+                <p class="text-gray-600 mb-4">Completa cada frase con la forma correcta del verbo apropiado del listado.</p>
+                <p class="mb-6 p-3 bg-indigo-50 rounded-lg text-indigo-800 text-sm"><strong>Verbos:</strong> Fumar, Correr, Tocar, Beber, Jugar, Abrir, Olvidar, Gastar, Molestar, Interrumpir.</p>
+                <div class="space-y-4 exercise-container">
+                     <!-- Ejercicios se insertan aquí -->
+                </div>
+                 <div class="mt-6 flex flex-wrap gap-2 justify-end">
+                    <button class="action-btn verify bg-sienna-600 hover:bg-sienna-700 text-white font-bold py-2 px-4 rounded" data-activity="2">Verificar</button>
+                    <button class="action-btn show bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-activity="2">Mostrar Respuestas</button>
+                    <button class="action-btn reset bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-activity="2">Reiniciar</button>
+                </div>
+            </div>
+
+            <!-- Actividad 3 -->
+            <div id="actividad3" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-2">Actividad 3: Completa con el Imperativo Afirmativo</h2>
+                <p class="text-gray-600 mb-6">Completa las frases con la forma correcta del imperativo (afirmativo) del verbo entre paréntesis.</p>
+                <div class="space-y-4 exercise-container">
+                    <!-- Ejercicios se insertan aquí -->
+                </div>
+                 <div class="mt-6 flex flex-wrap gap-2 justify-end">
+                    <button class="action-btn verify bg-sienna-600 hover:bg-sienna-700 text-white font-bold py-2 px-4 rounded" data-activity="3">Verificar</button>
+                    <button class="action-btn show bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-activity="3">Mostrar Respuestas</button>
+                    <button class="action-btn reset bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-activity="3">Reiniciar</button>
+                </div>
+            </div>
+
+            <!-- Actividad 4 -->
+            <div id="actividad4" class="tab-content hidden bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-2">Actividad 4: Imperativo Afirmativo o Negativo</h2>
+                <p class="text-gray-600 mb-6">Completa las frases con la forma correcta del imperativo (afirmativo o negativo) del verbo entre paréntesis.</p>
+                <div class="space-y-4 exercise-container">
+                    <!-- Ejercicios se insertan aquí -->
+                </div>
+                <div class="mt-6 flex flex-wrap gap-2 justify-end">
+                    <button class="action-btn verify bg-sienna-600 hover:bg-sienna-700 text-white font-bold py-2 px-4 rounded" data-activity="4">Verificar</button>
+                    <button class="action-btn show bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-activity="4">Mostrar Respuestas</button>
+                    <button class="action-btn reset bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded" data-activity="4">Reiniciar</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const activitiesData = {
+            '1': [
+                { sentence: '(Hablar) ______ más despacio.', answer: 'Habla' },
+                { sentence: '(Comer) ______ tus verduras.', answer: 'Come' },
+                { sentence: '(Estudiar) ______ para el examen.', answer: 'Estudia' },
+                { sentence: '(Cerrar) ______ la puerta.', answer: 'Cierra' },
+                { sentence: '(Ayudar a mí) ______ a llevar las bolsas de compras.', answer: 'Ayúdame' },
+                { sentence: '(Llamar) ______ a tu mamá para decirle que llegarás tarde.', answer: 'Llama' },
+                { sentence: '(Escribir) ______ tu nombre y la fecha en la parte superior de la hoja.', answer: 'Escribe' },
+                { sentence: '(No olvidar) ______ comprar leche en el supermercado.', answer: 'No olvides' },
+                { sentence: '(Ser) ______ cuidadoso.', answer: 'Sé' }
+            ],
+            '2': [
+                { sentence: '(Fumar) ______ dentro de este edificio.', answer: 'No fumes' },
+                { sentence: '(Correr) ______ alrededor de la piscina.', answer: 'No corras' },
+                { sentence: '(Tocar) ______ el interruptor, está averiado.', answer: 'No toques' },
+                { sentence: '(Beber) ______ alcohol si vas a conducir.', answer: 'No bebas' },
+                { sentence: '(Jugar) ______ con fuego, es peligroso.', answer: 'No juegues' },
+                { sentence: '(Abrir) ______ la caja hasta que llegue el momento.', answer: 'No abras' },
+                { sentence: '(Olvidar) ______ llevar tu identificación al aeropuerto.', answer: 'No olvides' },
+                { sentence: '(Gastar) ______ todo tu dinero en un solo día.', answer: 'No gastes' },
+                { sentence: '(Molestar) ______ a tu hermana mientras estudia.', answer: 'No molestes' },
+                { sentence: '(Interrumpir) ______ cuando alguien está hablando.', answer: 'No interrumpas' }
+            ],
+            '3': [
+                { sentence: '(abrir) ______ la ventana para que entre aire fresco.', answer: 'Abre' },
+                { sentence: '(apagar) ______ la luz cuando salgas de la habitación.', answer: 'Apaga' },
+                { sentence: '(estudiar) ______ para el examen final.', answer: 'Estudia' },
+                { sentence: '(invitar) ______ a tus amigos a la fiesta de cumpleaños.', answer: 'Invita' },
+                { sentence: '(llevar) ______ una chaqueta si hace frío.', answer: 'Lleva' },
+                { sentence: '(hacer, tú) ______ tu cama todos los días.', answer: 'Haz' },
+                { sentence: '(traer) ______ tus libros a clase.', answer: 'Trae' },
+                { sentence: '(decirme) ______ la respuesta en voz alta.', answer: 'Dime' },
+                { sentence: '(prestar) ______ atención a las instrucciones del profesor.', answer: 'Presta' },
+                { sentence: '(traer) ______ tus libros a clase.', answer: 'Trae' },
+                { sentence: '(no olvidar) ______ traer tus documentos mañana.', answer: 'No olvides' },
+                { sentence: '(no hablar) ______ con la boca llena.', answer: 'No hables' }
+            ],
+            '4': [
+                { sentence: '(no usar) ______ el teléfono durante la reunión.', answer: 'no uses' },
+                { sentence: '(dejar) ______ propina al camarero si recibes un buen servicio.', answer: 'deja' },
+                { sentence: '(no correr) ______ en los pasillos.', answer: 'no corras' },
+                { sentence: '(decir) ______ "gracias" cuando alguien te ayude.', answer: 'di' },
+                { sentence: '(apagar) ______ el ordenador antes de salir del trabajo.', answer: 'apaga' },
+                { sentence: 'Por favor, (evitar) ______ tocar las obras de arte en la galería.', answer: 'evita' },
+                { sentence: '(no hablar) ______ en voz alta durante la película.', answer: 'no hables' },
+                { sentence: '(no dejar) ______ basura en la calle.', answer: 'no dejes' },
+                { sentence: '(no abrir) ______ la puerta a desconocidos.', answer: 'no abras' },
+                { sentence: '(no fumar, tú) ______ en esta habitación.', answer: 'no fumes' },
+                { sentence: '(no tirar) ______ basura en el suelo.', answer: 'no tires' },
+                { sentence: '(no dejar) ______ alimentos en la nevera por mucho tiempo.', answer: 'no dejes' }
+            ]
+        };
+        
+        const formatAnswer = (str) => {
+            return str.trim().toLowerCase().replace(/[.,]/g, '');
+        };
+
+        function renderExercises() {
+            for (const activityId in activitiesData) {
+                const container = document.querySelector(`#actividad${activityId} .exercise-container`);
+                if(container) {
+                    container.innerHTML = activitiesData[activityId].map((exercise, index) => {
+                        const parts = exercise.sentence.split('______');
+                        return `
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-700">${index + 1}. ${parts[0]}</span>
+                            <input type="text" class="form-input w-48 border-gray-300 rounded-md shadow-sm focus:border-sienna-300 focus:ring focus:ring-sienna-200 focus:ring-opacity-50 transition" data-index="${index}">
+                            <span class="text-gray-700">${parts[1] || ''}</span>
+                            <span class="feedback-icon text-lg" data-feedback-for="${index}"></span>
+                        </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        const tabs = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                contents.forEach(content => content.classList.add('hidden'));
+                const activeContent = document.getElementById(tab.dataset.tab);
+                if(activeContent) {
+                    activeContent.classList.remove('hidden');
+                }
+            });
+        });
+
+        const actionButtons = document.querySelectorAll('.action-btn');
+        actionButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const activityId = e.target.dataset.activity;
+                const activityContainer = document.querySelector(`#actividad${activityId}`);
+                const inputs = activityContainer.querySelectorAll('input[type="text"]');
+                const exercises = activitiesData[activityId];
+                
+                if (button.classList.contains('verify')) {
+                    inputs.forEach(input => {
+                        const index = input.dataset.index;
+                        const userAnswer = formatAnswer(input.value);
+                        const correctAnswer = formatAnswer(exercises[index].answer);
+                        const feedbackIcon = activityContainer.querySelector(`[data-feedback-for="${index}"]`);
+                        
+                        input.classList.remove('correct-answer', 'incorrect-answer');
+                        
+                        if (userAnswer === correctAnswer) {
+                            input.classList.add('correct-answer');
+                            feedbackIcon.innerHTML = '✔️';
+                            feedbackIcon.style.color = '#22c55e';
+                        } else {
+                            input.classList.add('incorrect-answer');
+                            feedbackIcon.innerHTML = '❌';
+                            feedbackIcon.style.color = '#ef4444';
+                        }
+                        feedbackIcon.style.display = 'inline';
+                    });
+                } else if (button.classList.contains('show')) {
+                     inputs.forEach(input => {
+                        const index = input.dataset.index;
+                        input.value = exercises[index].answer;
+                        input.classList.remove('correct-answer', 'incorrect-answer');
+                        activityContainer.querySelector(`[data-feedback-for="${index}"]`).style.display = 'none';
+                    });
+                } else if (button.classList.contains('reset')) {
+                    inputs.forEach(input => {
+                        input.value = '';
+                        input.classList.remove('correct-answer', 'incorrect-answer');
+                        activityContainer.querySelector(`[data-feedback-for="${index}"]`).style.display = 'none';
+                    });
+                }
+            });
+        });
+        
+        // Configuración de los colores de Tailwind para usarlos en JS si fuera necesario
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                sienna: {
+                  50: '#fdf8f6',
+                  100: '#f2e8e5',
+                  200: '#eaddd7',
+                  300: '#e0cec7',
+                  400: '#d2bab0',
+                  500: '#bfa094',
+                  600: '#a18072',
+                  700: '#977669',
+                  800: '#846358',
+                  900: '#43302b',
+                },
+              }
+            }
+          }
+        }
+        
+        renderExercises();
+    });
+    </script>
+</body>
+</html>
+
